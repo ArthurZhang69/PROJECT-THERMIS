@@ -1295,6 +1295,15 @@ map.on('load', async () => {
   }, 1800);
 });
 
+// Fallback: hide loading screen even if map fails to load
+map.on('error', (e) => {
+  console.error('Map error:', e);
+  document.getElementById('loading').classList.add('hidden');
+});
+setTimeout(() => {
+  document.getElementById('loading').classList.add('hidden');
+}, 5000);
+
 // ── SWITCH LAYER ─────────────────────────────────────────────
 function switchLayer(key) {
   currentLayer = key;
