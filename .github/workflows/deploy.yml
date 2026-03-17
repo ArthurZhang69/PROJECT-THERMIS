@@ -1,0 +1,33 @@
+name: Deploy THERMIS Map
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verify secrets
+        run: |
+          if [ -z "${{ secrets.MAPBOX_TOKEN }}" ]; then echo "ERROR: MAPBOX_TOKEN is empty!"; else echo "MAPBOX_TOKEN is set (length: ${#MAPBOX_TOKEN})"; fi
+        env:
+          MAPBOX_TOKEN: ${{ secrets.MAPBOX_TOKEN }}
+
+      - name: Inject API Keys
+        run: |
+          find . -name "*.html" | xargs sed -i "s|YOUR_MAPBOX_TOKEN_HERE|${{ secrets.MAPBOX_TOKEN }}|g"
+          find . -name "*.html" | xargs sed -i "s|YOUR_ANTHROPIC_KEY_HERE|${{ secrets.ANTHROPIC_API_KEY }}|g"
+          find . -name "*.html" | xargs sed -i "s|YOUR_GOOGLE_MAPS_KEY_HERE|${{ secrets.GOOGLE_MAPS_API_KEY }}|g"
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./
+          publish_branch: gh-pages

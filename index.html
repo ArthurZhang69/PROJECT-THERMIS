@@ -1,0 +1,1627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PROJECT THERMIS · Ahmedabad Heat Vulnerability</title>
+<link rel="icon" type="image/svg+xml" href="tag_logo_v2.svg">
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@turf/turf@6/turf.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:        #0d0d12;
+    --bg2:       #13131a;
+    --bg3:       #1a1a24;
+    --border:    rgba(255,255,255,0.08);
+    --gold:      #c9a96e;
+    --teal:      #4ecdc4;
+    --red:       #e05c5c;
+    --text:      #e8e4dc;
+    --muted:     #7a7870;
+    --font-disp: 'Playfair Display', serif;
+    --font-ui:   'Outfit', sans-serif;
+    --font-mono: 'Outfit', sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-ui);
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── HEADER ── */
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 48px 10px 18px;
+    height: 100px;
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+    z-index: 10;
+  }
+
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+  }
+
+  .logo-badge {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    color: var(--bg);
+    background: var(--gold);
+    padding: 3px 8px;
+    border-radius: 2px;
+  }
+
+  .header-title {
+    font-family: var(--font-disp);
+    font-size: 42px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: var(--text);
+  }
+
+  .header-sub {
+    font-size: 17px;
+    font-weight: 300;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-top: -5px;
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+  }
+
+  .header-stat {
+    text-align: right;
+  }
+
+  .header-stat .val {
+    font-family: var(--font-disp);
+    font-size: 32px;
+    color: var(--red);
+    font-weight: 700;
+  }
+
+  .header-stat .lbl {
+    font-size: 15px;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    text-transform: uppercase;
+    display: block;
+    margin-top: -2px;
+  }
+
+  .header-divider {
+    width: 1px;
+    height: 48px;
+    background: var(--border);
+  }
+
+  /* ── MAIN LAYOUT ── */
+  .main {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    width: 340px;
+    flex-shrink: 0;
+    background: var(--bg2);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    overflow-x: hidden;
+    z-index: 5;
+  }
+
+  .sidebar-section {
+    padding: 20px 20px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-label {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  /* ── LAYER BUTTONS ── */
+  .layer-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 10px 12px;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    cursor: pointer;
+    margin-bottom: 6px;
+    transition: all 0.18s ease;
+    text-align: left;
+    color: var(--text);
+    font-family: var(--font-ui);
+  }
+
+  .layer-btn:hover {
+    background: rgba(255,255,255,0.04);
+    border-color: rgba(255,255,255,0.15);
+  }
+
+  .layer-btn.active {
+    border-color: var(--gold);
+    background: rgba(201,169,110,0.08);
+  }
+
+  .layer-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  .layer-info { flex: 1; }
+
+  .layer-name {
+    font-size: 17px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    display: block;
+    line-height: 1.2;
+  }
+
+  .layer-desc {
+    font-size: 13px;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+    margin-top: 1px;
+    display: block;
+  }
+
+  .layer-active-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--gold);
+    opacity: 0;
+    transition: opacity 0.18s;
+  }
+
+  .layer-btn.active .layer-active-dot { opacity: 1; }
+
+  /* ── LEGEND ── */
+  .legend-wrap {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .legend-bar {
+    height: 8px;
+    border-radius: 2px;
+    margin: 8px 0 4px;
+  }
+
+  .legend-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--muted);
+    font-family: var(--font-mono);
+  }
+
+  /* ── WARD INFO PANEL ── */
+  .ward-panel {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+  }
+
+  .ward-panel::-webkit-scrollbar { width: 3px; }
+  .ward-panel::-webkit-scrollbar-track { background: transparent; }
+  .ward-panel::-webkit-scrollbar-thumb { background: var(--border); }
+
+  .ward-empty {
+    color: var(--muted);
+    font-size: 14px;
+    font-weight: 300;
+    letter-spacing: 0.06em;
+    line-height: 1.7;
+    margin-top: 4px;
+  }
+
+  .ward-empty span {
+    display: block;
+    font-size: 12px;
+    margin-top: 8px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(122,120,112,0.6);
+  }
+
+  .ward-name {
+    font-family: var(--font-disp);
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 4px;
+  }
+
+  .ward-id {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    margin-bottom: 16px;
+  }
+
+  .metric-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+
+  .metric-card {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 10px 12px;
+  }
+
+  .metric-card.highlight {
+    border-color: var(--gold);
+    background: rgba(201,169,110,0.07);
+    grid-column: 1 / -1;
+  }
+
+  .metric-label {
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .metric-value {
+    font-family: var(--font-mono);
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 1;
+  }
+
+  .metric-value.gold { color: var(--gold); }
+  .metric-value.teal { color: var(--teal); }
+  .metric-value.red  { color: var(--red);  }
+
+  .metric-sub {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 2px;
+    letter-spacing: 0.06em;
+  }
+
+  .hvi-bar-wrap {
+    margin-top: 14px;
+  }
+
+  .hvi-bar-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+  }
+
+  .hvi-bar-track {
+    height: 6px;
+    background: var(--bg3);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .hvi-bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.4s ease;
+  }
+
+  /* ── MAP ── */
+  #map {
+    flex: 1;
+    position: relative;
+  }
+
+  .mapboxgl-popup-content {
+    background: var(--bg2) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 4px !important;
+    padding: 0 !important;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5) !important;
+    font-family: var(--font-ui) !important;
+    color: var(--text) !important;
+  }
+
+  .mapboxgl-popup-tip { display: none !important; }
+  .mapboxgl-popup-close-button {
+    color: var(--muted) !important;
+    font-size: 16px !important;
+    right: 8px !important;
+    top: 6px !important;
+  }
+
+  /* ── FOOTER STATUS ── */
+  .map-footer {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    z-index: 5;
+    pointer-events: none;
+  }
+
+  .status-pill {
+    background: rgba(13,13,18,0.85);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 5px 12px;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    text-transform: uppercase;
+    backdrop-filter: blur(8px);
+  }
+
+  .status-pill .dot {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--teal);
+    margin-right: 6px;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  /* ── LOADING ── */
+  #loading {
+    position: absolute;
+    inset: 0;
+    background: var(--bg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 120px;
+    z-index: 100;
+    transition: opacity 0.6s ease;
+  }
+
+  #loading.hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .loading-title {
+    font-family: var(--font-disp);
+    font-size: 88px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: var(--text);
+    margin-bottom: 2px;
+    opacity: 0;
+    transform: translateY(18px);
+    animation: fadeUp 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.2s forwards;
+  }
+
+  .loading-sub {
+    font-size: 13px;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(12px);
+    animation: fadeUp 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.55s forwards;
+  }
+
+  .ls-hl {
+    color: var(--gold);
+    font-weight: 600;
+  }
+
+  .loading-bar-track {
+    width: 420px;
+    height: 2px;
+    background: var(--bg3);
+    border-radius: 1px;
+    overflow: hidden;
+    opacity: 0;
+    animation: fadeIn 0.6s ease 0.95s forwards;
+  }
+
+  .loading-bar-fill {
+    height: 100%;
+    background: var(--gold);
+    border-radius: 1px;
+    animation: loadbar 1.8s ease 1s forwards;
+  }
+
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeIn {
+    to { opacity: 1; }
+  }
+
+  @keyframes loadbar {
+    from { width: 0; }
+    to   { width: 100%; }
+  }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  /* ── MAPBOX ZOOM CONTROL ── */
+  .mapboxgl-ctrl-group {
+    background: var(--bg2) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 4px !important;
+    box-shadow: none !important;
+  }
+  .mapboxgl-ctrl-group button {
+    background: transparent !important;
+    border: none !important;
+    width: 30px !important;
+    height: 30px !important;
+  }
+  .mapboxgl-ctrl-group button + button {
+    border-top: 1px solid var(--border) !important;
+  }
+  .mapboxgl-ctrl-icon.mapboxgl-ctrl-zoom-in span,
+  .mapboxgl-ctrl-icon.mapboxgl-ctrl-zoom-out span {
+    display: none;
+  }
+  .mapboxgl-ctrl-zoom-in .mapboxgl-ctrl-icon::after {
+    content: '+';
+    color: var(--gold);
+    font-size: 18px;
+    font-weight: 300;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+  }
+  .mapboxgl-ctrl-zoom-out .mapboxgl-ctrl-icon::after {
+    content: '−';
+    color: var(--gold);
+    font-size: 18px;
+    font-weight: 300;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+  }
+  .mapboxgl-ctrl-group button:hover {
+    background: var(--bg3) !important;
+  }
+
+  /* ── AI ANALYSIS ── */
+  .ai-analysis {
+    margin-top: 16px;
+    border: 1px solid rgba(201,169,110,0.25);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .ai-analysis-header {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 12px;
+    background: rgba(201,169,110,0.07);
+    border-bottom: 1px solid rgba(201,169,110,0.15);
+  }
+
+  .ai-analysis-header-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    color: var(--gold);
+    text-transform: uppercase;
+    flex: 1;
+  }
+
+  .ai-spark {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    opacity: 1;
+    filter: drop-shadow(0 0 5px rgba(201,169,110,0.8));
+  }
+
+  .ai-analysis-body {
+    padding: 12px;
+    font-size: 13px;
+    line-height: 1.72;
+    color: rgba(232,228,220,0.82);
+    letter-spacing: 0.02em;
+    min-height: 64px;
+    position: relative;
+  }
+
+  /* shimmer skeleton while loading */
+  .ai-skeleton {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+
+  .ai-skeleton-line {
+    height: 11px;
+    border-radius: 3px;
+    background: linear-gradient(90deg,
+      rgba(255,255,255,0.04) 25%,
+      rgba(255,255,255,0.10) 50%,
+      rgba(255,255,255,0.04) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.4s infinite;
+  }
+
+  @keyframes shimmer {
+    0%   { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  .ai-text-content {
+    animation: fadeInUp 0.35s ease;
+  }
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(5px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── AI RIGHT PANEL ── */
+  .ai-panel {
+    width: 340px;
+    flex-shrink: 0;
+    background: var(--bg2);
+    border-left: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 5;
+  }
+
+  .ai-panel-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 18px 20px 18px 16px;
+    background: linear-gradient(135deg, rgba(201,169,110,0.14) 0%, rgba(201,169,110,0.04) 100%);
+    border-bottom: 1px solid rgba(201,169,110,0.35);
+    flex-shrink: 0;
+  }
+
+  .ai-panel-title {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    color: var(--gold);
+    text-transform: uppercase;
+    white-space: nowrap;
+    flex: 1;
+    text-shadow: 0 0 18px rgba(201,169,110,0.5);
+  }
+
+  .ai-panel-status {
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .ai-panel-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 14px 16px;
+  }
+
+  .ai-panel-empty {
+    color: var(--muted);
+    font-size: 15px;
+    font-weight: 300;
+    letter-spacing: 0.04em;
+    line-height: 1.7;
+    margin-top: 4px;
+  }
+
+  .ai-panel-empty span {
+    display: block;
+    font-size: 13px;
+    margin-top: 8px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(122,120,112,0.5);
+  }
+
+  .ai-panel-ward {
+    font-family: var(--font-disp);
+    font-size: 19px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .ai-panel-text {
+    font-size: 15px;
+    line-height: 1.78;
+    color: rgba(232,228,220,0.85);
+    letter-spacing: 0.02em;
+    animation: fadeInUp 0.35s ease;
+  }
+
+  .ai-panel-text strong {
+    color: var(--red);
+    font-weight: 700;
+  }
+
+  /* ── WARD IMAGE CARDS ── */
+  .ward-img-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-bottom: 10px;
+  }
+
+  .ward-img-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+
+  .ward-img-card {
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    position: relative;
+  }
+
+  .ward-img-card.full {
+    grid-column: 1 / -1;
+  }
+
+  .ward-img-card img {
+    width: 100%;
+    object-fit: cover;
+    display: block;
+    transition: opacity 0.3s ease;
+  }
+
+  .ward-img-card.large img { height: 160px; }
+  .ward-img-card.small img { height: 110px; }
+
+  .ward-img-card img.loading {
+    opacity: 0;
+  }
+
+  .ward-img-label {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 3px 6px;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(232,228,220,0.85);
+    background: rgba(13,13,18,0.72);
+    backdrop-filter: blur(4px);
+  }
+
+  /* ── DATA PROVIDERS ── */
+  .data-providers {
+    margin-top: auto;
+    padding: 20px 20px 24px;
+    border-top: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+
+  .provider-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 9px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .provider-row:last-child { border-bottom: none; }
+
+  .provider-icon {
+    width: 28px;
+    height: 28px;
+    flex-shrink: 0;
+  }
+
+  .provider-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: 0.02em;
+  }
+
+  .provider-role {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  /* ── AI PANEL DEMOGRAPHIC CARDS ── */
+  .ai-demog-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    margin-bottom: 14px;
+  }
+
+  .ai-demog-card {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 8px 10px;
+  }
+
+  .ai-demog-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 3px;
+  }
+
+  .ai-demog-value {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.2;
+  }
+
+  .ai-demog-sub {
+    font-size: 10px;
+    color: var(--muted);
+    margin-top: 2px;
+    letter-spacing: 0.04em;
+  }
+</style>
+</head>
+<body>
+
+<!-- LOADING SCREEN -->
+<div id="loading">
+  <div class="loading-title">THERMIS</div>
+  <div class="loading-sub"><span class="ls-hl">T</span>hermal <span class="ls-hl">H</span>eat-Risk <span class="ls-hl">E</span>nvironmental<br><span class="ls-hl">R</span>emote <span class="ls-hl">M</span>apping & <span class="ls-hl">I</span>ntervention <span class="ls-hl">S</span>ystem</div>
+  <div class="loading-bar-track">
+    <div class="loading-bar-fill"></div>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="header-left">
+    <img src="tag_logo_v3.svg" alt="TAG · UCL CASA" style="height: 170px; width: auto; display: block; margin-top: 12px;">
+    <div style="margin-left: -5px;">
+      <div class="header-title">PROJECT THERMIS</div>
+      <div class="header-sub">Ahmedabad Heat Vulnerability · 2026</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="header-stat">
+      <div class="val" id="stat-deaths">1,344</div>
+      <div class="lbl">Lives lost · May 2010</div>
+    </div>
+    <div class="header-divider"></div>
+    <div class="header-stat">
+      <div class="val" style="color:var(--red)" id="stat-highrisk">—</div>
+      <div class="lbl">High-risk wards (HVI 4–5)</div>
+    </div>
+    <div class="header-divider"></div>
+    <div class="header-stat">
+      <div class="val" style="color:var(--gold)" id="stat-avglst">—</div>
+      <div class="lbl">City avg LST · Summer</div>
+    </div>
+  </div>
+</header>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+
+    <!-- LAYERS -->
+    <div class="sidebar-section">
+      <div class="section-label">Data Layers</div>
+
+      <button class="layer-btn active" data-layer="lst" onclick="switchLayer('lst')">
+        <div class="layer-dot" style="background: linear-gradient(135deg, #040274, #ff0000)"></div>
+        <div class="layer-info">
+          <span class="layer-name">Land Surface Temperature</span>
+          <span class="layer-desc">Landsat 8 · 2019–2022 summer mean</span>
+        </div>
+        <div class="layer-active-dot"></div>
+      </button>
+
+      <button class="layer-btn" data-layer="hvi" onclick="switchLayer('hvi')">
+        <div class="layer-dot" style="background: linear-gradient(135deg, #ffffb2, #bd0026)"></div>
+        <div class="layer-info">
+          <span class="layer-name">Heat Vulnerability Index</span>
+          <span class="layer-desc">LST × 0.5 + Pop × 0.3 − NDVI × 0.2</span>
+        </div>
+        <div class="layer-active-dot"></div>
+      </button>
+
+      <button class="layer-btn" data-layer="ndvi" onclick="switchLayer('ndvi')">
+        <div class="layer-dot" style="background: linear-gradient(135deg, #d73027, #1a9850)"></div>
+        <div class="layer-info">
+          <span class="layer-name">NDVI · Adaptive Capacity</span>
+          <span class="layer-desc">Landsat 8 · vegetation cover index</span>
+        </div>
+        <div class="layer-active-dot"></div>
+      </button>
+    </div>
+
+    <!-- LEGEND -->
+    <div class="legend-wrap">
+      <div class="section-label" id="legend-title">Land Surface Temperature</div>
+      <div class="legend-bar" id="legend-bar"
+           style="background: linear-gradient(to right, #040274, #30c8e2, #3ae237, #fff705, #ff0000)">
+      </div>
+      <div class="legend-labels">
+        <span id="legend-min">25°C</span>
+        <span id="legend-mid">40°C</span>
+        <span id="legend-max">55°C</span>
+      </div>
+    </div>
+
+    <!-- WARD INFO -->
+    <div class="ward-panel" id="ward-panel">
+      <div class="section-label">Ward Information</div>
+      <div class="ward-empty">
+        Click any ward on the map to view detailed heat vulnerability data.
+        <span>← Select a ward</span>
+      </div>
+    </div>
+
+    <!-- DATA PROVIDERS -->
+    <div class="data-providers">
+      <div class="section-label" style="margin-bottom:10px">Data Providers</div>
+      <div class="provider-row">
+        <svg viewBox="0 0 24 24" class="provider-icon" fill="none">
+          <!-- GEE gear-earth icon simplified -->
+          <circle cx="12" cy="12" r="10" fill="#4285F4" opacity="0.15"/>
+          <circle cx="12" cy="12" r="6" fill="#4285F4" opacity="0.6"/>
+          <circle cx="12" cy="12" r="3" fill="#4285F4"/>
+        </svg>
+        <div class="provider-info">
+          <div class="provider-name">Google Earth Engine</div>
+          <div class="provider-role">Spatial Computing</div>
+        </div>
+      </div>
+      <div class="provider-row">
+        <svg viewBox="0 0 24 24" class="provider-icon" fill="none">
+          <path d="M12 3L14.5 9.5L21 12L14.5 14.5L12 21L9.5 14.5L3 12L9.5 9.5L12 3Z" fill="#c9874a"/>
+        </svg>
+        <div class="provider-info">
+          <div class="provider-name">Claude · Anthropic</div>
+          <div class="provider-role">AI Analysis</div>
+        </div>
+      </div>
+      <div class="provider-row">
+        <svg viewBox="0 0 24 24" class="provider-icon" fill="none">
+          <rect x="3" y="3" width="18" height="18" rx="2" fill="#5B8DB8" opacity="0.25"/>
+          <circle cx="12" cy="12" r="5" fill="#5B8DB8" opacity="0.8"/>
+          <line x1="12" y1="3" x2="12" y2="21" stroke="#5B8DB8" stroke-width="1" opacity="0.5"/>
+          <line x1="3" y1="12" x2="21" y2="12" stroke="#5B8DB8" stroke-width="1" opacity="0.5"/>
+        </svg>
+        <div class="provider-info">
+          <div class="provider-name">Landsat 8 · USGS</div>
+          <div class="provider-role">Satellite Imagery</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- MAP -->
+  <div id="map">
+  </div>
+
+  <!-- AI ANALYSIS PANEL -->
+  <div class="ai-panel">
+    <div class="ai-panel-header">
+      <svg class="ai-spark" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z"
+              fill="#c9a96e" opacity="0.9"/>
+      </svg>
+      <span class="ai-panel-title">AI Analysis</span>
+      <span class="ai-panel-status" id="ai-status"></span>
+    </div>
+    <div class="ai-panel-body" id="ai-panel-body">
+      <div class="ai-panel-empty">
+        Select a ward on the map to generate an AI-powered heat risk analysis.
+        <span>← Click any ward</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ── CONFIG ──────────────────────────────────────────────────
+// 替换成你的 Mapbox token
+mapboxgl.accessToken = 'YOUR_MAPBOX_TOKEN_HERE';
+
+// ← 在这里粘贴你的 Anthropic API key
+const ANTHROPIC_API_KEY = 'YOUR_ANTHROPIC_KEY_HERE';
+
+// ← 在这里粘贴你的 Google Maps API key（用于 Street View 图片）
+// 需开启 Street View Static API：https://console.cloud.google.com/
+const GOOGLE_MAPS_API_KEY = 'YOUR_GOOGLE_MAPS_KEY_HERE';
+
+// GeoJSON 文件路径 — 替换成你的实际文件路径或 URL
+const GEOJSON = {
+  hvi:        'GEE_Exports/ahmedabad_ward_hvi.geojson',
+  lst:        'GEE_Exports/ahmedabad_ward_lst.geojson',
+  ndvi:       'GEE_Exports/ahmedabad_ward_ndvi.geojson',
+  population: 'GEE_Exports/ahmedabad_ward_population.geojson',
+};
+
+// ── LAYER CONFIG ─────────────────────────────────────────────
+const LAYERS = {
+  hvi: {
+    title:    'Heat Vulnerability Index',
+    field:    'mean',
+    min:      'Low', mid: 'Medium', max: 'High',
+    gradient: 'linear-gradient(to right, #ffffb2, #fecc5c, #fd8d3c, #f03b20, #bd0026)',
+    color: ['interpolate', ['linear'], ['get', 'hvi_class'],
+      1, '#ffffb2', 2, '#fecc5c', 3, '#fd8d3c', 4, '#f03b20', 5, '#bd0026'],
+    valueKey: 'hvi_class',
+    valueLabel: 'HVI Class',
+    valueColor: 'gold',
+    format: v => v ? `${parseFloat(v).toFixed(2)}` : '—',
+  },
+  lst: {
+    title:    'Land Surface Temperature',
+    field:    'mean',
+    min:      '25°C', mid: '40°C', max: '55°C',
+    gradient: 'linear-gradient(to right, #040274, #30c8e2, #3ae237, #fff705, #ff0000)',
+    color: ['interpolate', ['linear'], ['get', 'mean'],
+      25, '#040274', 35, '#30c8e2', 40, '#3ae237',
+      45, '#fff705', 50, '#ff6e08', 55, '#ff0000'],
+    valueKey: 'mean',
+    valueLabel: 'Mean LST',
+    valueColor: 'red',
+    format: v => v ? `${parseFloat(v).toFixed(1)}°C` : '—',
+  },
+  ndvi: {
+    title:    'NDVI · Adaptive Capacity',
+    field:    'mean',
+    min:      'Low', mid: 'Moderate', max: 'High',
+    gradient: 'linear-gradient(to right, #d73027, #fee08b, #1a9850)',
+    color: ['interpolate', ['linear'], ['get', 'mean'],
+      0, '#d73027', 0.25, '#fee08b', 0.5, '#1a9850'],
+    valueKey: 'mean',
+    valueLabel: 'Mean NDVI',
+    valueColor: 'teal',
+    format: v => v ? parseFloat(v).toFixed(3) : '—',
+  },
+};
+
+// ── MAP INIT ─────────────────────────────────────────────────
+const map = new mapboxgl.Map({
+  container: 'map',
+  style: 'mapbox://styles/mapbox/satellite-v9',
+  center: [72.58, 23.02],
+  zoom: 11,
+  attributionControl: false,
+});
+
+map.addControl(new mapboxgl.NavigationControl({ showCompass: false }), 'top-right');
+
+let currentLayer = 'lst';
+let loadedData = {};
+
+// ── LOAD ALL GEOJSON ─────────────────────────────────────────
+async function loadAllData() {
+  for (const [key, path] of Object.entries(GEOJSON)) {
+    try {
+      const res = await fetch(path);
+      loadedData[key] = await res.json();
+    } catch(e) {
+      console.warn(`Could not load ${key}:`, e);
+      // Fallback: empty FeatureCollection
+      loadedData[key] = { type: 'FeatureCollection', features: [] };
+    }
+  }
+}
+
+map.on('load', async () => {
+  await loadAllData();
+
+  // ── POPULATE HEADER STATS FROM DATA ──────────────────────
+  const lstFeatures = loadedData.lst ? loadedData.lst.features : [];
+  const hviFeatures = loadedData.hvi ? loadedData.hvi.features : [];
+  if (lstFeatures.length) {
+    const avgLST = lstFeatures.reduce((s, f) => s + (parseFloat(f.properties.mean) || 0), 0) / lstFeatures.length;
+    document.getElementById('stat-avglst').textContent = avgLST.toFixed(1) + '°C';
+  }
+  if (hviFeatures.length) {
+    const highRisk = hviFeatures.filter(f => parseInt(f.properties.hvi_class) >= 4).length;
+    document.getElementById('stat-highrisk').textContent = highRisk;
+  }
+
+  // ── CITY BOUNDARY (union of all wards) ───────────────────
+  const wardSource = loadedData.lst || loadedData.hvi;
+  if (wardSource && wardSource.features.length && window.turf) {
+    try {
+      let cityBoundary = wardSource.features[0];
+      for (let i = 1; i < wardSource.features.length; i++) {
+        cityBoundary = turf.union(cityBoundary, wardSource.features[i]);
+      }
+      map.addSource('city-boundary', { type: 'geojson', data: cityBoundary });
+      map.addLayer({
+        id: 'city-outline',
+        type: 'line',
+        source: 'city-boundary',
+        paint: {
+          'line-color': 'rgba(201,169,110,0.7)',
+          'line-width': 3.5,
+        },
+      });
+    } catch(e) {
+      console.warn('City boundary union failed:', e);
+    }
+  }
+
+  // ── DARKEN SATELLITE BASE LAYER ───────────────────────────
+  if (map.getLayer('satellite')) {
+    map.setPaintProperty('satellite', 'raster-brightness-max', 0.62);
+    map.setPaintProperty('satellite', 'raster-saturation', -0.25);
+    map.setPaintProperty('satellite', 'raster-contrast', 0.1);
+  }
+
+  // ── RASTER TILESETS (Mapbox uploaded) ──────────────────────
+  const rasterSources = {
+    'rst-hvi':  'arthurzhang.curow8uj',
+    'rst-lst':  'arthurzhang.dwdawn3e',
+    'rst-lst10':'arthurzhang.00fpaieu',
+    'rst-ndvi': 'arthurzhang.dnyyv7bo',
+  };
+
+  window.rasterMap = {
+    hvi:  'rst-hvi',
+    lst:  'rst-lst',
+    ndvi: 'rst-ndvi',
+  };
+
+  for (const [id, tileset] of Object.entries(rasterSources)) {
+    map.addSource(id, {
+      type: 'raster',
+      url: `mapbox://${tileset}`,
+      tileSize: 256,
+    });
+    map.addLayer({
+      id: id,
+      type: 'raster',
+      source: id,
+      paint: {
+        'raster-opacity': id === 'rst-lst' ? 0.78 : 0,
+        'raster-opacity-transition': { duration: 400 },
+      },
+    });
+  }
+
+  // ── GEOJSON SOURCES (ward boundaries for click/hover) ──────
+  for (const [key, data] of Object.entries(loadedData)) {
+    map.addSource(`src-${key}`, { type: 'geojson', data, generateId: true });
+  }
+
+  for (const [key, cfg] of Object.entries(LAYERS)) {
+    // Transparent fill for click detection
+    map.addLayer({
+      id: `layer-${key}`,
+      type: 'fill',
+      source: `src-${key}`,
+      paint: {
+        'fill-color': 'transparent',
+        'fill-opacity': key === currentLayer ? 0.01 : 0,
+      },
+    });
+
+    map.addLayer({
+      id: `outline-${key}`,
+      type: 'line',
+      source: `src-${key}`,
+      paint: {
+        'line-color': 'rgba(255,255,255,0.18)',
+        'line-width': 0.6,
+        'line-opacity': key === currentLayer ? 1 : 0,
+        'line-opacity-transition': { duration: 400 },
+      },
+    });
+
+    // Hover highlight — driven by feature state (no full-layer repaint)
+    map.addLayer({
+      id: `hover-${key}`,
+      type: 'line',
+      source: `src-${key}`,
+      paint: {
+        'line-color': '#c9a96e',
+        'line-width': 2.5,
+        'line-opacity': ['case', ['boolean', ['feature-state', 'hovered'], false], 1, 0],
+      },
+    });
+  }
+
+  // Hover interactions — use feature state to avoid full-layer repaints
+  let hoveredId = null;
+  let hoveredLayer = null;
+
+  for (const key of Object.keys(LAYERS)) {
+    map.on('mousemove', `layer-${key}`, (e) => {
+      if (key !== currentLayer) return;
+      map.getCanvas().style.cursor = 'pointer';
+      if (e.features.length > 0) {
+        const newId = e.features[0].id;
+        if (newId === hoveredId) return; // same ward — no-op
+        // Clear previous feature state
+        if (hoveredId !== null && hoveredLayer) {
+          map.setFeatureState({ source: `src-${hoveredLayer}`, id: hoveredId }, { hovered: false });
+        }
+        hoveredId = newId;
+        hoveredLayer = key;
+        map.setFeatureState({ source: `src-${key}`, id: hoveredId }, { hovered: true });
+      }
+    });
+
+    map.on('mouseleave', `layer-${key}`, () => {
+      if (key !== currentLayer) return;
+      map.getCanvas().style.cursor = '';
+      if (hoveredId !== null && hoveredLayer) {
+        map.setFeatureState({ source: `src-${hoveredLayer}`, id: hoveredId }, { hovered: false });
+        hoveredId = null;
+        hoveredLayer = null;
+      }
+    });
+
+    // Click → ward panel
+    map.on('click', `layer-${key}`, (e) => {
+      if (key !== currentLayer) return;
+      const props = e.features[0].properties;
+      showWardInfo(props, key, e.lngLat);
+    });
+  }
+
+  // ── WARD NAME LABELS ──────────────────────────────────────
+  // Use the first loaded GeoJSON source for labels (all share the same geometry)
+  const labelSourceKey = Object.keys(loadedData)[0];
+  if (labelSourceKey) {
+    map.addLayer({
+      id: 'ward-labels',
+      type: 'symbol',
+      source: `src-${labelSourceKey}`,
+      layout: {
+        'text-field': ['coalesce', ['get', 'sourceward'], ['get', 'ward_name'], ['get', 'NAME'], ['get', 'name'], ''],
+        'text-font': ['DIN Pro Medium', 'Arial Unicode MS Regular'],
+        'text-size': [
+          'interpolate', ['linear'], ['zoom'],
+          10, 9,
+          12, 11,
+          14, 13
+        ],
+        'text-max-width': 8,
+        'text-anchor': 'center',
+        'text-allow-overlap': false,
+        'text-ignore-placement': false,
+      },
+      paint: {
+        'text-color': 'rgba(255,255,255,0.90)',
+        'text-halo-color': 'rgba(0,0,0,0.65)',
+        'text-halo-width': 1.2,
+      },
+    });
+  }
+
+  // ── ZOOM-BASED RASTER OPACITY ────────────────────────────
+  // zoom ≤ 11 → 0.78 (full), zoom 13+ → 0.25 (faded), linear in between
+  function updateRasterOpacityForZoom() {
+    const z = map.getZoom();
+    const opacity = z <= 11 ? 0.78
+                  : z >= 13 ? 0.25
+                  : 0.78 - (z - 11) / 2 * (0.78 - 0.25);
+    const activeRaster = window.rasterMap && window.rasterMap[currentLayer];
+    if (activeRaster && map.getLayer(activeRaster)) {
+      map.setPaintProperty(activeRaster, 'raster-opacity', opacity);
+    }
+  }
+  map.on('zoom', updateRasterOpacityForZoom);
+
+  // Hide loading screen
+  setTimeout(() => {
+    document.getElementById('loading').classList.add('hidden');
+  }, 1800);
+});
+
+// Fallback: hide loading screen even if map fails to load
+map.on('error', (e) => {
+  console.error('Map error:', e);
+  document.getElementById('loading').classList.add('hidden');
+});
+setTimeout(() => {
+  document.getElementById('loading').classList.add('hidden');
+}, 5000);
+
+// ── SWITCH LAYER ─────────────────────────────────────────────
+function switchLayer(key) {
+  currentLayer = key;
+  const cfg = LAYERS[key];
+
+  // Update buttons
+  document.querySelectorAll('.layer-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.layer === key);
+  });
+
+  // Update legend
+  document.getElementById('legend-title').textContent = cfg.title;
+  document.getElementById('legend-bar').style.background = cfg.gradient;
+  document.getElementById('legend-min').textContent = cfg.min;
+  document.getElementById('legend-mid').textContent = cfg.mid;
+  document.getElementById('legend-max').textContent = cfg.max;
+
+  // Toggle raster layers
+  if (window.rasterMap) {
+    for (const rId of Object.values(window.rasterMap)) {
+      if (map.getLayer(rId)) {
+        map.setPaintProperty(rId, 'raster-opacity', 0);
+      }
+    }
+    const activeRaster = window.rasterMap[key];
+    if (activeRaster && map.getLayer(activeRaster)) {
+      map.setPaintProperty(activeRaster, 'raster-opacity', 0.78);
+    }
+  }
+
+  // Toggle GeoJSON outlines + click targets
+  for (const k of Object.keys(LAYERS)) {
+    if (map.getLayer(`layer-${k}`)) {
+      map.setPaintProperty(`layer-${k}`, 'fill-opacity', k === key ? 0.01 : 0);
+      map.setPaintProperty(`outline-${k}`, 'line-opacity', k === key ? 1 : 0);
+      map.setPaintProperty(`hover-${k}`, 'line-opacity', 0);
+    }
+  }
+
+  // Reset ward panel
+  resetWardPanel();
+}
+
+// ── CROSS-LAYER LOOKUP ────────────────────────────────────────
+// Given props from one layer, find the same ward in another layer's data
+function getCrossLayerProps(props, targetKey) {
+  const data = loadedData[targetKey];
+  if (!data || !data.features) return null;
+  const wardId   = props.sourceward || props.ward_name || props.objectid;
+  const feature  = data.features.find(f => {
+    const p = f.properties;
+    if (wardId && (p.sourceward || p.ward_name)) {
+      return (p.sourceward || p.ward_name) === wardId;
+    }
+    return p.objectid === props.objectid;
+  });
+  return feature ? feature.properties : null;
+}
+
+// ── WARD INFO PANEL ───────────────────────────────────────────
+function showWardInfo(props, layerKey, lngLat) {
+  const cfg = LAYERS[layerKey];
+  const panel = document.getElementById('ward-panel');
+
+  // Try to get all layer values for this ward
+  const lstProps  = layerKey === 'lst'  ? props : getCrossLayerProps(props, 'lst');
+  const ndviProps = layerKey === 'ndvi' ? props : getCrossLayerProps(props, 'ndvi');
+  const hviProps  = layerKey === 'hvi'  ? props : getCrossLayerProps(props, 'hvi');
+  const lstVal    = lstProps  ? (parseFloat(lstProps.mean  || lstProps.lst_mean)  || null) : null;
+  const ndviVal   = ndviProps ? (parseFloat(ndviProps.mean || ndviProps.ndvi_mean) || null) : null;
+  const hviCrossClass = hviProps ? (parseInt(hviProps.hvi_class) || null) : null;
+  const lstFmt    = lstVal  ? lstVal.toFixed(1) + '°C' : '—';
+  const ndviFmt   = ndviVal ? ndviVal.toFixed(3)       : '—';
+
+  const mainVal = props[cfg.valueKey] || props['mean'];
+  const mainFmt = cfg.format(mainVal);
+
+  // HVI bar: prefer cross-layer hvi_class, fallback to props
+  const hviClass = hviCrossClass || parseInt(props.hvi_class) || 3;
+  const hviPct   = ((hviClass - 1) / 4) * 100;
+  const hviColor = ['#ffffb2','#fecc5c','#fd8d3c','#f03b20','#bd0026'][hviClass - 1] || '#fd8d3c';
+
+  // Two small metric cards: LST and NDVI (skip whichever is the active layer)
+  const smallCards = [];
+  if (layerKey !== 'lst') {
+    smallCards.push(`<div class="metric-card">
+        <div class="metric-label">LST Mean</div>
+        <div class="metric-value red" style="font-size:16px">${lstFmt}</div>
+        <div class="metric-sub">Summer 2019–22</div>
+      </div>`);
+  }
+  if (layerKey !== 'ndvi') {
+    smallCards.push(`<div class="metric-card">
+        <div class="metric-label">NDVI</div>
+        <div class="metric-value teal" style="font-size:16px">${ndviFmt}</div>
+        <div class="metric-sub">Adaptive capacity</div>
+      </div>`);
+  }
+  if (layerKey !== 'hvi') {
+    const hviLabels = ['', 'Very Low', 'Low', 'Moderate', 'High', 'Very High'];
+    smallCards.push(`<div class="metric-card" style="border-color:${hviColor}44">
+        <div class="metric-label">HVI Class</div>
+        <div class="metric-value" style="font-size:16px;color:${hviColor}">${hviClass} / 5</div>
+        <div class="metric-sub" style="color:${hviColor}99">${hviLabels[hviClass] || 'Moderate'}</div>
+      </div>`);
+  }
+
+  const wardName = props.sourceward || props.ward_name || props.NAME || props.name || props.Ward_Name || `Ward ${props.ward_id || props.sourcewa_1 || props.FID || '—'}`;
+  const wardId   = props.sourcewa_1 || props.ward_id || props.FID || props.OBJECTID || '—';
+
+  panel.innerHTML = `
+    <div class="section-label">Ward Information</div>
+    <div class="ward-name">${wardName}</div>
+    <div class="ward-id">WARD ID · ${wardId} · AMC</div>
+
+    <div class="metric-grid">
+      <div class="metric-card highlight">
+        <div class="metric-label">${cfg.valueLabel}</div>
+        <div class="metric-value ${cfg.valueColor}">${mainFmt}</div>
+        <div class="metric-sub">${cfg.title}</div>
+      </div>
+      ${smallCards.slice(0, 2).join('')}
+    </div>
+  `;
+
+  // Prepare AI panel with ward images + skeleton loader
+  const aiPanelBody = document.getElementById('ai-panel-body');
+  const aiStatus    = document.getElementById('ai-status');
+  if (aiPanelBody) {
+    const token = mapboxgl.accessToken;
+    let imgSection = '';
+    if (lngLat) {
+      const lng  = lngLat.lng.toFixed(5);
+      const lat  = lngLat.lat.toFixed(5);
+      const locStr = `${lat},${lng}`;
+      const W = 560, H_SAT = 180, H_SV = 200;
+
+      // OSM-style overview via Mapbox Static Images (OpenStreetMap data, streets style)
+      const satUrl = `https://api.mapbox.com/styles/v1/mapbox/streets-v12/static/${lng},${lat},14/${W}x${H_SAT}@2x?access_token=${token}`;
+
+      // Street View: two angles, with metadata check first
+      let svSection = '<div id="sv-container"></div>';
+      if (GOOGLE_MAPS_API_KEY) {
+        // Check metadata first to confirm coverage, then inject images
+        const metaUrl = `https://maps.googleapis.com/maps/api/streetview/metadata?location=${locStr}&key=${GOOGLE_MAPS_API_KEY}`;
+        fetch(metaUrl)
+          .then(r => r.json())
+          .then(meta => {
+            const svContainer = document.getElementById('sv-container');
+            if (!svContainer) return;
+            if (meta.status === 'OK') {
+              // Use the exact lat/lng returned by metadata for best coverage
+              const svLoc = `${meta.location.lat},${meta.location.lng}`;
+              const svBase = `https://maps.googleapis.com/maps/api/streetview?size=560x360&location=${svLoc}&fov=90&pitch=5&key=${GOOGLE_MAPS_API_KEY}`;
+              svContainer.innerHTML = `
+                <div class="ward-img-row" style="margin-top:6px">
+                  <div class="ward-img-card small">
+                    <img class="loading" src="${svBase}&heading=0" alt="Street View N" onload="this.classList.remove('loading')" onerror="this.src=''; this.parentElement.querySelector('.ward-img-label').textContent='No coverage'">
+                    <div class="ward-img-label">Street View · N</div>
+                  </div>
+                  <div class="ward-img-card small">
+                    <img class="loading" src="${svBase}&heading=180" alt="Street View S" onload="this.classList.remove('loading')" onerror="this.src=''; this.parentElement.querySelector('.ward-img-label').textContent='No coverage'">
+                    <div class="ward-img-label">Street View · S</div>
+                  </div>
+                </div>`;
+            } else {
+              svContainer.innerHTML = `<div style="font-size:10px;letter-spacing:0.1em;color:var(--muted);text-transform:uppercase;padding:6px 0">Street View · No coverage at this location</div>`;
+            }
+          })
+          .catch(err => {
+            const svContainer = document.getElementById('sv-container');
+            if (svContainer) svContainer.innerHTML = `<div style="font-size:10px;color:var(--red);padding:6px 0">Street View error: ${err.message}</div>`;
+          });
+      } else {
+        svSection = `<div style="font-size:10px;letter-spacing:0.1em;color:var(--muted);text-transform:uppercase;padding:8px 0 4px">Street View · Add GOOGLE_MAPS_API_KEY to enable</div>`;
+      }
+
+      imgSection = `
+      <div class="ward-img-grid">
+        <div class="ward-img-card large">
+          <img class="loading" src="${satUrl}" alt="Satellite" onload="this.classList.remove('loading')" onerror="this.closest('.ward-img-card').style.display='none'">
+          <div class="ward-img-label">OpenStreetMap · Neighbourhood</div>
+        </div>
+        ${svSection}
+      </div>`;
+    }
+    // Population card
+    const popProps = getCrossLayerProps(props, 'population');
+    const popVal   = popProps ? Math.round(parseFloat(popProps.sum) || 0) : null;
+    const popFmt   = popVal   ? popVal.toLocaleString() : '—';
+    const popCard  = `
+      <div class="ai-demog-card" style="margin-bottom:14px">
+        <div class="ai-demog-label">Ward Population</div>
+        <div class="ai-demog-value" style="font-size:22px">${popFmt}</div>
+        <div class="ai-demog-sub">Residents · Census estimate</div>
+      </div>`;
+
+    aiPanelBody.innerHTML = `
+      <div class="ai-panel-ward">${wardName}</div>
+      ${popCard}
+      ${imgSection}
+      <div id="ai-analysis-body">
+        <div class="ai-skeleton">
+          <div class="ai-skeleton-line" style="width:92%"></div>
+          <div class="ai-skeleton-line" style="width:78%"></div>
+          <div class="ai-skeleton-line" style="width:85%"></div>
+          <div class="ai-skeleton-line" style="width:60%"></div>
+        </div>
+      </div>
+    `;
+  }
+
+  // Async AI call — does not block panel render
+  fetchAIAnalysis(wardName, hviClass, props, layerKey);
+}
+
+function getWardValue(props, key) {
+  return props[key] !== undefined ? props[key] : null;
+}
+
+// ── AI ANALYSIS ───────────────────────────────────────────────
+async function fetchAIAnalysis(wardName, hviClass, props, layerKey) {
+  const bodyEl   = document.getElementById('ai-analysis-body');
+  const statusEl = document.getElementById('ai-status') || document.createElement('span');
+  if (!bodyEl) return;
+
+  // Build concise data context for the model
+  const lstRaw  = props.lst_mean  || (layerKey === 'lst'  ? props.mean : null);
+  const ndviRaw = props.ndvi_mean || (layerKey === 'ndvi' ? props.mean : null);
+  const lstStr  = lstRaw  ? `${parseFloat(lstRaw).toFixed(1)} °C`  : 'unavailable';
+  const ndviStr = ndviRaw ? parseFloat(ndviRaw).toFixed(3)          : 'unavailable';
+  const popProps = getCrossLayerProps(props, 'population');
+  const popNum   = popProps ? Math.round(parseFloat(popProps.sum) || 0) : null;
+  const popStr   = popNum   ? popNum.toLocaleString() : 'unavailable';
+
+  const hviLabels = ['', 'Very Low', 'Low', 'Moderate', 'High', 'Very High'];
+  const hviLabel  = hviLabels[hviClass] || 'Moderate';
+
+  const prompt = `You are an urban heat risk analyst for Ahmedabad Municipal Corporation (AMC), India. 
+Write EXACTLY 2 SHORT sentences (max 35 words each) of concise, data-driven analysis for this ward. 
+Be specific about the data values — wrap key numbers and data values in **double asterisks** to emphasise them. Reference HAP (Heat Action Plan) interventions where relevant. 
+Do NOT use bullet points, headers, or other markdown. Only **bold** markers are allowed.
+Do NOT repeat the ward name followed by the word "ward" — refer to it naturally, e.g. just "${wardName}" or "this ward".
+
+Ward: ${wardName}
+HVI Class: ${hviClass} / 5 (${hviLabel})
+Mean Summer LST: ${lstStr}
+Mean NDVI: ${ndviStr}
+Ward Population: ${popStr}
+Active data layer: ${LAYERS[layerKey].title}`;
+
+  try {
+    statusEl.textContent = 'Generating…';
+
+    if (!ANTHROPIC_API_KEY) {
+      throw new Error('No API key configured — set ANTHROPIC_API_KEY in the script.');
+    }
+
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': ANTHROPIC_API_KEY,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true',
+      },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 1000,
+        messages: [{ role: 'user', content: prompt }],
+      }),
+    });
+
+    if (!res.ok) {
+      const errBody = await res.text();
+      throw new Error(`API ${res.status}: ${errBody}`);
+    }
+
+    const data = await res.json();
+    const text = (data.content || [])
+      .filter(b => b.type === 'text')
+      .map(b => b.text)
+      .join('');
+
+    if (!bodyEl || !document.getElementById('ai-analysis-body')) return; // ward changed
+    statusEl.textContent = 'Powered by Claude';
+    const html = text.trim().replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+    bodyEl.innerHTML = `<div class="ai-panel-text">${html}</div>`;
+
+  } catch (err) {
+    console.warn('AI analysis failed:', err);
+    if (bodyEl && document.getElementById('ai-analysis-body')) {
+      statusEl.textContent = 'Error';
+      bodyEl.innerHTML = `<span style="color:var(--red);font-size:11px;line-height:1.6;word-break:break-all">${err.message || err}</span>`;
+    }
+  }
+}
+
+function resetWardPanel() {
+  document.getElementById('ward-panel').innerHTML = `
+    <div class="section-label">Ward Information</div>
+    <div class="ward-empty">
+      Click any ward on the map to view detailed heat vulnerability data.
+      <span>← Select a ward</span>
+    </div>
+  `;
+  const aiPanelBody = document.getElementById('ai-panel-body');
+  const aiStatus    = document.getElementById('ai-status');
+  if (aiPanelBody) {
+    aiPanelBody.innerHTML = `
+      <div class="ai-panel-empty">
+        Select a ward on the map to generate an AI-powered heat risk analysis.
+        <span>← Click any ward</span>
+      </div>
+    `;
+  }
+  if (aiStatus) aiStatus.textContent = '';
+}
+</script>
+</body>
+</html> 
