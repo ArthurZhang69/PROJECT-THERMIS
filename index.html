@@ -1073,6 +1073,8 @@ map.addControl(new mapboxgl.NavigationControl({ showCompass: false }), 'top-righ
 
 let currentLayer = 'lst';
 let loadedData = {};
+let hoveredId    = null;
+let hoveredLayer = null;
 
 // ── LOAD ALL GEOJSON ─────────────────────────────────────────
 async function loadAllData() {
@@ -1207,9 +1209,6 @@ map.on('load', async () => {
   }
 
   // Hover interactions — use feature state to avoid full-layer repaints
-  let hoveredId = null;
-  let hoveredLayer = null;
-
   for (const key of Object.keys(LAYERS)) {
     map.on('mousemove', `layer-${key}`, (e) => {
       if (key !== currentLayer) return;
@@ -1334,12 +1333,25 @@ function switchLayer(key) {
     }
   }
 
+  // Clear any lingering hover state from the previous layer
+  if (hoveredId !== null && hoveredLayer) {
+    map.setFeatureState({ source: `src-${hoveredLayer}`, id: hoveredId }, { hovered: false });
+  }
+  hoveredId    = null;
+  hoveredLayer = null;
+  map.getCanvas().style.cursor = '';
+
   // Toggle GeoJSON outlines + click targets
   for (const k of Object.keys(LAYERS)) {
     if (map.getLayer(`layer-${k}`)) {
       map.setPaintProperty(`layer-${k}`, 'fill-opacity', k === key ? 0.01 : 0);
       map.setPaintProperty(`outline-${k}`, 'line-opacity', k === key ? 1 : 0);
-      map.setPaintProperty(`hover-${k}`, 'line-opacity', 0);
+      // Active layer: restore feature-state expression so hover works;
+      // inactive layers: static 0
+      map.setPaintProperty(`hover-${k}`, 'line-opacity',
+        k === key
+          ? ['case', ['boolean', ['feature-state', 'hovered'], false], 1, 0]
+          : 0);
     }
   }
 
