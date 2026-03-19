@@ -904,7 +904,7 @@
       </button>
 
       <button class="layer-btn" data-layer="ndvi" onclick="switchLayer('ndvi')">
-        <div class="layer-dot" style="background: linear-gradient(135deg, #d73027, #1a9850)"></div>
+        <div class="layer-dot" style="background: linear-gradient(135deg, #ffffcc, #31a354)"></div>
         <div class="layer-info">
           <span class="layer-name">NDVI · Adaptive Capacity</span>
           <span class="layer-desc">Landsat 8 · vegetation cover index</span>
@@ -1050,9 +1050,9 @@ const LAYERS = {
     title:    'NDVI · Adaptive Capacity',
     field:    'mean',
     min:      'Low', mid: 'Moderate', max: 'High',
-    gradient: 'linear-gradient(to right, #d73027, #fee08b, #1a9850)',
+    gradient: 'linear-gradient(to right, #ffffcc, #addd8e, #31a354)',
     color: ['interpolate', ['linear'], ['get', 'mean'],
-      0, '#d73027', 0.25, '#fee08b', 0.5, '#1a9850'],
+      0.10, '#ffffcc', 0.22, '#addd8e', 0.35, '#31a354'],
     valueKey: 'mean',
     valueLabel: 'Mean NDVI',
     valueColor: 'teal',
@@ -1292,7 +1292,7 @@ map.on('load', async () => {
   // Hide loading screen
   setTimeout(() => {
     document.getElementById('loading').classList.add('hidden');
-  }, 3200);
+  }, 1800);
 });
 
 // Fallback: hide loading screen even if map fails to load
