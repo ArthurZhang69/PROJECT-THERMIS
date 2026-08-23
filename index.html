@@ -881,6 +881,16 @@
   .fact-table td.n { text-align: right; font-variant-numeric: tabular-nums; }
   .fact-table td.r { text-align: right; color: var(--muted); font-size: 10px; width: 48px; }
   .fact-table tr + tr td { border-top: 1px solid rgba(255,255,255,0.05); }
+  .measure { border-left: 2px solid rgba(201,169,110,0.45); padding-left: 10px; margin-bottom: 14px; }
+  .measure-name { font-size: 12px; color: #c9a96e; margin-bottom: 5px; }
+  .measure-ev { font-size: 10.5px; color: var(--muted); line-height: 1.6; }
+  .measure-ev b { color: inherit; font-weight: 600; }
+  .measure-sit { font-size: 10.5px; margin-top: 6px; line-height: 1.6; }
+  .measure-sit ul { margin: 3px 0 0; padding-left: 15px; }
+  .measure-unknown { font-size: 10px; color: var(--muted); margin-top: 5px; font-style: italic; }
+  .gaps { margin-top: 12px; border-top: 1px dashed rgba(255,255,255,0.14); padding-top: 10px; }
+  .gap { font-size: 10px; color: var(--muted); line-height: 1.55; margin-bottom: 7px; }
+  .gap b { color: #b08f5e; font-weight: 600; font-style: normal; }
   .fact-raw { margin-top: 8px; }
   .fact-raw summary {
     cursor: pointer; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase;
@@ -1853,6 +1863,14 @@ const I18N = {
     filterMatched: 'Wards matching', filterNone: 'No ward satisfies all of these at once.',
     filterTruncated: 'Showing the first 12 matches.',
     similarLabel: 'Measured · closest to',
+    builtEnv: 'Built environment', measuresLabel: 'Measures whose conditions this ward matches',
+    gapsLabel: 'What this tool cannot tell you',
+    bBuildings: 'Buildings mapped', bTrees: 'Trees mapped', bGreen: 'Green space share',
+    bAmenities: 'Public amenities', bWater: 'Drinking water points',
+    osmMissing: 'OpenStreetMap counts have not been extracted yet, so the rules below run on the satellite measures alone.',
+    noMeasure: 'No measure\u2019s target conditions are met here. That is a result, not a gap.',
+    sitingCandidates: 'Public buildings that could be checked as sites:',
+    unknownPrefix: 'Not known: ', vsShort: 'vs',
     similarCaveat: 'Matched on one variable only. Industrial land use, building materials and surface cover are uncontrolled, so this is an association, not a cause.',
     mLst: 'Land surface temp', mNdvi: 'NDVI', mPop: 'Population', mDens: 'Density', mHvi: 'HVI',
     mVsMedian: 'vs city median',
@@ -1863,16 +1881,18 @@ const I18N = {
       'Which wards are highest or lowest on temperature, vegetation, population or vulnerability',
       'Wards meeting several conditions at once — hot but not classed vulnerable, dense but still green',
       'Wards resembling one ward on one measure while differing on another',
+      'What could be done about a ward — which heat measures its measured conditions match, and on what evidence',
       'The city as a whole — median and range across all 48 wards',
     ],
     scopeCant: 'It will not answer',
     scopeCantList: [
       'Why a ward is hot — this data shows association, never cause',
-      'Forecasts, or the effect of an intervention',
+      'Forecasts, or how much a measure would cool a ward',
+      'Anything about age, income or household composition — this dataset has none, so no measure can be aimed at a particular group',
       'Anything outside Ahmedabad, or outside these four measurements',
     ],
     scopeNote: 'Every figure is computed from the ward table. The model chooses what to look up and writes the sentence around it; it never produces a number.',
-    egs: ['Which wards are hot but not classed vulnerable', 'Somewhere like Odhav but greener', 'Dense wards that are still green'],
+    egs: ['What could be done about Odhav', 'Which wards are hot but not classed vulnerable', 'Somewhere like Odhav but greener'],
   },
   zh: {
     _toggle: 'EN',
@@ -1916,6 +1936,14 @@ const I18N = {
     filterMatched: '满足条件的区', filterNone: '没有任何一个区同时满足这些条件。',
     filterTruncated: '仅显示前 12 个。',
     similarLabel: '实测 · 最接近',
+    builtEnv: '建成环境', measuresLabel: '本区条件所匹配的措施',
+    gapsLabel: '这个工具无法告诉你的事',
+    bBuildings: '已测绘建筑', bTrees: '已测绘树木', bGreen: '绿地占比',
+    bAmenities: '公共设施', bWater: '饮水点',
+    osmMissing: '尚未抓取 OpenStreetMap 的建成环境数据，下面的规则仅依据卫星测量值运行。',
+    noMeasure: '没有任何一项措施的触发条件在本区成立。这是一个结论，不是缺失。',
+    sitingCandidates: '可作为选址候选、需实地核实的公共建筑：',
+    unknownPrefix: '未知：', vsShort: '对比',
     similarCaveat: '只在一个变量上做了匹配。产业结构、建筑材质、下垫面等因素未被控制，所以这是相关，不是因果。',
     mLst: '地表温度', mNdvi: 'NDVI', mPop: '人口', mDens: '人口密度', mHvi: '脆弱性指数',
     mVsMedian: '与全市中位数之差',
@@ -1926,16 +1954,18 @@ const I18N = {
       '温度、植被、人口、脆弱性四项里谁最高谁最低',
       '同时满足多个条件的区 —— 比如「很热但脆弱性不高」「密度大但绿化仍好」',
       '在某一项上与某个区相似、但在另一项上差别大的区',
+      '某个区可以做什么 —— 哪些高温治理措施的触发条件在这里成立，依据是什么',
       '全市整体 —— 48 个区的中位数与取值范围',
     ],
     scopeCant: '它不会回答',
     scopeCantList: [
       '某个区「为什么」热 —— 这份数据只能显示相关，永远给不出因果',
-      '预测，或某项干预措施的效果',
+      '预测，或某项措施能降温多少',
+      '年龄、收入、家庭结构 —— 数据里没有，所以任何措施都无法针对特定人群',
       '艾哈迈达巴德以外的地方，或这四项测量以外的内容',
     ],
     scopeNote: '每个数字都由行政区数据表算出。模型只决定查什么、并把结果写成一句话，它不产生任何数字。',
-    egs: ['哪些区很热但脆弱性等级不高', '和 Odhav 相似但绿化更好的区', '人口密集但绿化仍然好的区'],
+    egs: ['Odhav 这个区可以做什么', '哪些区很热但脆弱性等级不高', '和 Odhav 相似但绿化更好的区'],
   },
 };
 
@@ -2121,6 +2151,67 @@ function renderSimilarFacts(f) {
     </div>`;
 }
 
+function renderInterventionFacts(f) {
+  // Server-side strings arrive as {en, zh}; plain strings still work.
+  const L = (x) => escapeHtml(typeof x === 'object' && x ? (x[LANG] ?? x.en) : String(x ?? ''));
+  const num = (v) => {
+    if (typeof v !== 'number') return escapeHtml(String(v));
+    if (Number.isInteger(v)) return v.toLocaleString();
+    // Counts and populations read as integers even when a median lands on .5.
+    return Math.abs(v) >= 1000 ? Math.round(v).toLocaleString() : v.toFixed(v < 1 ? 4 : 2);
+  };
+
+  const built = f.builtEnvironment ? `
+    <div class="fact-block">
+      <div class="fact-block-label">${t('builtEnv')} · OpenStreetMap</div>
+      <div class="fact-row"><span class="k">${t('bBuildings')}</span><span class="v">${num(f.builtEnvironment.buildings)}</span></div>
+      <div class="fact-row"><span class="k">${t('bTrees')}</span><span class="v">${num(f.builtEnvironment.trees)}</span></div>
+      <div class="fact-row"><span class="k">${t('bGreen')}</span><span class="v">${num(f.builtEnvironment.greenSharePct)}%</span></div>
+      <div class="fact-row"><span class="k">${t('bAmenities')}</span><span class="v">${num(f.builtEnvironment.publicAmenities)}</span></div>
+      <div class="fact-row"><span class="k">${t('bWater')}</span><span class="v">${num(f.builtEnvironment.waterPoints)}</span></div>
+    </div>` : `
+    <div class="fact-block">
+      <div class="fact-block-label">${t('builtEnv')}</div>
+      <div class="measure-unknown">${t('osmMissing')}</div>
+    </div>`;
+
+  const measures = f.matchedCount === 0
+    ? `<div class="ai-panel-text" style="color:var(--muted)">${t('noMeasure')}</div>`
+    : f.matched.map((m) => {
+        const ev = m.evidence.map((e) => {
+          const rank = e.rank ? ` (${e.rank}/${e.of})` : '';
+          const vs = e.comparedTo != null ? ` · ${t('vsShort')} ${num(e.comparedTo)}` : '';
+          return `${L(e.label)} <b>${num(e.value)}</b>${rank}${vs}`;
+        }).join(' · ');
+        const sit = m.siting ? `
+          <div class="measure-sit">
+            ${m.siting.candidates.length
+              ? `<div>${t('sitingCandidates')}</div><ul>${m.siting.candidates.map((c) => `<li>${escapeHtml(c.name)} <span style="color:var(--muted)">· ${escapeHtml(c.kind)}</span></li>`).join('')}</ul>`
+              : ''}
+            <div class="measure-unknown">${L(m.siting.note)}</div>
+          </div>` : '';
+        return `
+          <div class="measure">
+            <div class="measure-name">${L(m.measure)}</div>
+            <div class="measure-ev">${ev}</div>
+            ${sit}
+            <div class="measure-unknown">${t('unknownPrefix')}${m.unknowns.map(L).join(' ')}</div>
+          </div>`;
+      }).join('');
+
+  const gaps = f.dataGaps.map((g) => `<div class="gap"><b>${L(g.missing)}</b> — ${L(g.consequence)}</div>`).join('');
+
+  return `
+    ${built}
+    <div class="fact-block">
+      <div class="fact-block-label">${t('measuresLabel')} · ${f.matchedCount} / ${f.consideredCount}</div>
+      ${measures}
+      <div class="measure-unknown" style="margin-top:10px">${L(f.disclaimer)}</div>
+      <div class="gaps"><div class="fact-block-label" style="color:var(--muted)">${t('gapsLabel')}</div>${gaps}</div>
+      ${rawBlock(f)}
+    </div>`;
+}
+
 function renderFactsFor(route, facts) {
   if (!facts || !route) return '';
   try {
@@ -2129,6 +2220,7 @@ function renderFactsFor(route, facts) {
     if (route.intent === 'compare') return renderCompareFacts(facts);
     if (route.intent === 'filter') return renderFilterFacts(facts);
     if (route.intent === 'similar') return renderSimilarFacts(facts);
+    if (route.intent === 'intervention') return renderInterventionFacts(facts);
     if (route.intent === 'city') return renderCityFacts(facts);
   } catch (e) {
     console.warn('fact rendering failed:', e);

@@ -1,7 +1,19 @@
+import { readFileSync } from 'node:fs'
+import { fileURLToPath } from 'node:url'
+import { dirname, join } from 'node:path'
 import {
   getWard, compareWards, findSimilar, rankWards, cityStats, resolveWard,
   filterWards, checkNumbers, checkCausalLanguage, WARDS,
 } from '../lib/facts.mjs'
+import { interventionsFor } from '../lib/interventions.mjs'
+
+// Built-environment counts are optional: the rules run on satellite measures
+// alone and simply gain sharper evidence when the OSM extraction has been run.
+let OSM = null
+try {
+  const here = dirname(fileURLToPath(import.meta.url))
+  OSM = JSON.parse(readFileSync(join(here, '..', 'data', 'osm.json'), 'utf8')).wards
+} catch { OSM = null }
 
 const WARD_NAMES = WARDS.map((w) => w.ward)
 
@@ -25,6 +37,8 @@ Decide "intent":
                ("hot but not classed vulnerable", "dense and still green").
 - "similar"  — asks for wards resembling one ward on some measure while
                differing on another ("somewhere like Odhav but greener").
+- "intervention" — asks what could be done about a named ward: measures,
+               governance options, "what should the city do here".
 - "city"     — about the city as a whole or the dataset itself.
 - "help"     — about the map, the layers, the score, or how to use this.
 - "unclear"  — you cannot tell.
@@ -35,6 +49,7 @@ Shapes:
 {"intent":"rank","metric":"lst"|"ndvi"|"population"|"popDensity"|"hvi","order":"desc"|"asc","n":integer 3-10}
 {"intent":"filter","conditions":[{"metric":<metric>,"op":"gt"|"gte"|"lt"|"lte","ref":"min"|"q1"|"median"|"q3"|"max"|"mean"|<number>}]}
 {"intent":"similar","ward":string,"similarOn":<metric>,"differOn":<metric>,"outcome":<metric>}
+{"intent":"intervention","ward":string}
 {"intent":"city"}
 {"intent":"help","topic":string}
 {"intent":"unclear","clarify":string}
@@ -68,8 +83,12 @@ ABSOLUTE RULES
    (因为/由于/导致/造成/使得/引起/之所以).
    Use instead: "alongside", "together with", "at the same time", "is associated
    with", "伴随", "同时", "相关".
-3. Describe what is measured and how it ranks. Do not recommend policy unless
-   FACTS contains an intervention field.
+3. Describe what is measured and how it ranks. Do not recommend a measure
+   unless FACTS.matched contains it. When FACTS.matched is present, report only
+   those measures, attribute each to the evidence beside it, and never add one
+   of your own. When FACTS.matched is empty, say plainly that no measure's
+   target conditions are met here — that is a result, not a failure. Never rank
+   measures by cost, urgency or benefit; FACTS contains no such basis.
 4. Reply in the language named by REPLY LANGUAGE. Three sentences at most.
    Plain prose, no lists, no markdown headings.
 
@@ -79,7 +98,7 @@ const ALLOWED_METRICS = ['lst', 'ndvi', 'population', 'popDensity', 'hvi']
 
 export function parseRoute(content) {
   const raw = typeof content === 'string' ? JSON.parse(content) : content
-  const intent = ['ward', 'compare', 'rank', 'filter', 'similar', 'city', 'help', 'unclear'].includes(raw?.intent) ? raw.intent : 'unclear'
+  const intent = ['ward', 'compare', 'rank', 'filter', 'similar', 'intervention', 'city', 'help', 'unclear'].includes(raw?.intent) ? raw.intent : 'unclear'
   if (intent === 'ward') return { intent, ward: str(raw.ward, 60) }
   if (intent === 'compare') return { intent, wardA: str(raw.wardA, 60), wardB: str(raw.wardB, 60) }
   if (intent === 'filter') {
@@ -101,6 +120,7 @@ export function parseRoute(content) {
       outcome: metric(raw.outcome, 'lst'),
     }
   }
+  if (intent === 'intervention') return { intent, ward: str(raw.ward, 60) }
   if (intent === 'rank') {
     const n = Number(raw.n)
     return {
@@ -125,6 +145,7 @@ export function gatherFacts(route) {
     case 'similar': return findSimilar(route.ward, {
       similarOn: route.similarOn, differOn: route.differOn, outcome: route.outcome, k: 3,
     })
+    case 'intervention': return interventionsFor(route.ward, OSM)
     case 'city': return cityStats()
     default: return null
   }

@@ -1,0 +1,246 @@
+{
+ "source": "OpenStreetMap via Overpass",
+ "fetchedAt": "2026-08-23",
+ "wards": {
+  "1302501": {
+   "ward": "Gota",
+   "ok": false,
+   "error": "Overpass 406: <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">\n<html><head>\n<t"
+  },
+  "1302502": {
+   "ward": "Chandlodiya",
+   "ok": false,
+   "error": "Overpass 406: <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">\n<html><head>\n<t"
+  },
+  "1302503": {
+   "ward": "Chandkheda",
+   "ok": false,
+   "error": "fetch failed"
+  },
+  "1302504": {
+   "ward": "Sabarmati",
+   "ok": false,
+   "error": "fetch failed"
+  },
+  "1302505": {
+   "ward": "Ranip",
+   "ok": false,
+   "error": "fetch failed"
+  },
+  "1302506": {
+   "ward": "New Wadaj",
+   "ok": false,
+   "error": "fetch failed"
+  },
+  "1302507": {
+   "ward": "Ghatlodia",
+   "ok": false,
+   "error": "fetch failed"
+  },
+  "1302508": {
+   "ward": "Thaltej",
+   "ok": false,
+   "error": "Overpass 406: <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">\n<html><head>\n<t"
+  },
+  "1302509": {
+   "ward": "Naranpura",
+   "ok": false,
+   "error": "fetch failed"
+  },
+  "1302510": {
+   "ward": "S. P. Stadium",
+   "ok": false,
+   "error": "fetch failed"
+  },
+  "1302511": {
+   "ward": "Sardar Nagar",
+   "ok": false,
+   "error": "Overpass 406: <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">\n<html><head>\n<t"
+  },
+  "1302512": {
+   "ward": "Naroda",
+   "ok": false,
+   "error": "Overpass 406: <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">\n<html><head>\n<t"
+  },
+  "1302513": {
+   "ward": "Saijpur Bogha",
+   "ok": false,
+   "error": "Overpass 406: <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">\n<html><head>\n<t"
+  },
+  "1302514": {
+   "ward": "Kuber Nagar",
+   "ok": false,
+   "error": "Overpass 406: <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">\n<html><head>\n<t"
+  },
+  "1302515": {
+   "ward": "Asarwa",
+   "ok": false,
+   "error": "fetch failed"
+  },
+  "1302516": {
+   "ward": "Shahibag",
+   "ok": false,
+   "error": "fetch failed"
+  },
+  "1302517": {
+   "ward": "Shahpur",
+   "ok": false,
+   "error": "fetch failed"
+  },
+  "1302518": {
+   "ward": "Navrangpura",
+   "ok": false,
+   "error": "fetch failed"
+  },
+  "1302519": {
+   "ward": "Bodakdev",
+   "ok": false,
+   "error": "fetch failed"
+  },
+  "1302520": {
+   "ward": "Jodhpur",
+   "ok": false,
+   "error": "fetch failed"
+  },
+  "1302521": {
+   "ward": "Dariyapur",
+   "ok": false,
+   "error": "fetch failed"
+  },
+  "1302522": {
+   "ward": "India colony",
+   "ok": false,
+   "error": "Overpass 406: <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">\n<html><head>\n<t"
+  },
+  "1302523": {
+   "ward": "Thakkarbapa Nagar",
+   "ok": false,
+   "error": "Overpass 406: <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">\n<html><head>\n<t"
+  },
+  "1302524": {
+   "ward": "Nikol",
+   "ok": false,
+   "error": "fetch failed"
+  },
+  "1302525": {
+   "ward": "Virat Nagar",
+   "ok": false,
+   "error": "fetch failed"
+  },
+  "1302526": {
+   "ward": "Bapu Nagar",
+   "ok": false,
+   "error": "Overpass 406: <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">\n<html><head>\n<t"
+  },
+  "1302527": {
+   "ward": "Saraspur-Rakhiyal",
+   "ok": false,
+   "error": "Overpass 406: <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">\n<html><head>\n<t"
+  },
+  "1302528": {
+   "ward": "Khadia",
+   "ok": false,
+   "error": "fetch failed"
+  },
+  "1302529": {
+   "ward": "Jamalpur",
+   "ok": false,
+   "error": "fetch failed"
+  },
+  "1302530": {
+   "ward": "Paldi",
+   "ok": false,
+   "error": "fetch failed"
+  },
+  "1302531": {
+   "ward": "Vasna",
+   "ok": false,
+   "error": "fetch failed"
+  },
+  "1302532": {
+   "ward": "Vejalpur",
+   "ok": false,
+   "error": "fetch failed"
+  },
+  "1302533": {
+   "ward": "Sarkhej",
+   "ok": false,
+   "error": "fetch failed"
+  },
+  "1302534": {
+   "ward": "Maktampura",
+   "ok": false,
+   "error": "fetch failed"
+  },
+  "1302535": {
+   "ward": "Baherampura",
+   "ok": false,
+   "error": "fetch failed"
+  },
+  "1302536": {
+   "ward": "Danilimda",
+   "ok": false,
+   "error": "fetch failed"
+  },
+  "1302537": {
+   "ward": "Mani Nagar",
+   "ok": false,
+   "error": "fetch failed"
+  },
+  "1302538": {
+   "ward": "Gomtipur",
+   "ok": false,
+   "error": "fetch failed"
+  },
+  "1302539": {
+   "ward": "Amraiwadi",
+   "ok": false,
+   "error": "fetch failed"
+  },
+  "1302540": {
+   "ward": "Odhav",
+   "ok": false,
+   "error": "fetch failed"
+  },
+  "1302541": {
+   "ward": "Vastral",
+   "ok": false,
+   "error": "fetch failed"
+  },
+  "1302542": {
+   "ward": "Indrapuri",
+   "ok": false,
+   "error": "fetch failed"
+  },
+  "1302543": {
+   "ward": "Bhaipura Hatkeshwar",
+   "ok": false,
+   "error": "fetch failed"
+  },
+  "1302544": {
+   "ward": "Khokhra",
+   "ok": false,
+   "error": "fetch failed"
+  },
+  "1302545": {
+   "ward": "Isanpur",
+   "ok": false,
+   "error": "fetch failed"
+  },
+  "1302546": {
+   "ward": "Lambha",
+   "ok": false,
+   "error": "Overpass 406: <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">\n<html><head>\n<t"
+  },
+  "1302547": {
+   "ward": "Vatva",
+   "ok": false,
+   "error": "fetch failed"
+  },
+  "1302548": {
+   "ward": "Ramol Hathijan",
+   "ok": false,
+   "error": "Overpass 406: <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">\n<html><head>\n<t"
+  }
+ }
+}

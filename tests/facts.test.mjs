@@ -125,3 +125,84 @@ test('the router accepts filter and similar, and clamps both', async () => {
   assert.equal(sim.differOn, 'ndvi', 'falls back to a real metric')
   assert.ok(gatherFacts(sim).matches.length > 0)
 })
+
+// Policy text is where a language model is most convincing and least reliable,
+// so the measures are chosen by thresholds and only described by the model.
+// These tests are about discrimination: rules that fire everywhere are the
+// same failure as the interchangeable paragraphs they replace.
+test('measures discriminate between wards instead of firing everywhere', async () => {
+  const { interventionsFor } = await import('../lib/interventions.mjs')
+  const hot = interventionsFor('Odhav')
+  const cool = interventionsFor('Paldi')
+  assert.ok(hot.matchedCount > cool.matchedCount)
+  assert.equal(cool.matchedCount, 0, 'the coolest ward should trigger nothing')
+  assert.ok(hot.matchedCount <= hot.consideredCount)
+})
+
+test('every fired measure carries the numbers that fired it', async () => {
+  const { interventionsFor } = await import('../lib/interventions.mjs')
+  const { WARDS } = await import('../lib/facts.mjs')
+  const r = interventionsFor('Odhav')
+  const w = WARDS.find((x) => x.ward === 'Odhav')
+  for (const m of r.matched) {
+    assert.ok(m.evidence.length > 0, `${m.id} has no evidence`)
+    assert.ok(m.unknowns.length > 0, `${m.id} claims to know everything`)
+    for (const e of m.evidence) {
+      assert.ok(Number.isFinite(e.value), `${m.id}: evidence value is not a number`)
+      // Anything a reader sees exists in both languages; a Chinese panel with
+      // English caveats undercuts exactly the credibility this layer is for.
+      assert.ok(e.label.en && e.label.zh, `${m.id}: evidence label is not bilingual`)
+    }
+    assert.ok(m.measure.en && m.measure.zh, `${m.id}: measure name is not bilingual`)
+    for (const u of m.unknowns) assert.ok(u.en && u.zh, `${m.id}: unknown is not bilingual`)
+  }
+  // Evidence values are the ward's real values, not restatements.
+  const lstEv = r.matched.flatMap((m) => m.evidence).find((e) => e.label.en === 'Land surface temp')
+  assert.equal(lstEv.value, w.lst)
+})
+
+test('the data gaps travel with every answer', async () => {
+  const { interventionsFor, DATA_GAPS } = await import('../lib/interventions.mjs')
+  assert.ok(DATA_GAPS.some((g) => g.id === 'population-structure'))
+  for (const g of DATA_GAPS) {
+    assert.ok(g.missing.en && g.missing.zh, `${g.id}: not bilingual`)
+    assert.ok(g.consequence.en && g.consequence.zh, `${g.id}: consequence not bilingual`)
+  }
+  for (const ward of ['Odhav', 'Paldi']) {
+    const r = interventionsFor(ward)
+    assert.equal(r.dataGaps.length, DATA_GAPS.length, `${ward} dropped the gaps`)
+    assert.match(r.disclaimer.en, /not a ranked plan/)
+    assert.ok(r.disclaimer.zh.length > 0)
+  }
+})
+
+test('OSM counts sharpen the evidence without being required', async () => {
+  const { interventionsFor } = await import('../lib/interventions.mjs')
+  const { WARDS } = await import('../lib/facts.mjs')
+  const code = String(WARDS.find((w) => w.ward === 'Odhav').lgdCode)
+  const withoutOsm = interventionsFor('Odhav')
+  assert.equal(withoutOsm.osmAvailable, false)
+  assert.equal(withoutOsm.builtEnvironment, null)
+
+  const withOsm = interventionsFor('Odhav', {
+    [code]: { ok: true, buildings: 1200, trees: 4, greenAreaKm2: 0.02, amenities: 9, waterPoints: 1,
+      publicBuildings: [{ name: 'Odhav Municipal School', kind: 'school' }] },
+  })
+  assert.equal(withOsm.osmAvailable, true)
+  assert.equal(withOsm.builtEnvironment.buildings, 1200)
+  const centre = withOsm.matched.find((m) => m.id === 'cooling-centre')
+  assert.equal(centre.siting.candidates[0].name, 'Odhav Municipal School')
+  assert.match(centre.siting.note.en, /not as chosen locations/)
+  assert.ok(centre.siting.note.zh.includes('不是已选定'))
+})
+
+test('a ward with no mapped public building says so rather than inventing one', async () => {
+  const { interventionsFor } = await import('../lib/interventions.mjs')
+  const { WARDS } = await import('../lib/facts.mjs')
+  const code = String(WARDS.find((w) => w.ward === 'Odhav').lgdCode)
+  const r = interventionsFor('Odhav', { [code]: { ok: true, buildings: 10, trees: 0, greenAreaKm2: 0, amenities: 0, waterPoints: 0, publicBuildings: [] } })
+  const centre = r.matched.find((m) => m.id === 'cooling-centre')
+  assert.deepEqual(centre.siting.candidates, [])
+  assert.match(centre.siting.note.en, /gap in the map, not proof/)
+  assert.ok(centre.siting.note.zh.includes('地图的缺失'))
+})

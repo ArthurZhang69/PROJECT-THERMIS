@@ -1,11 +1,13 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "regions": ["hkg1"],
+  "regions": [
+    "hkg1"
+  ],
   "outputDirectory": ".",
   "functions": {
     "api/analyze.js": {
       "maxDuration": 30,
-      "includeFiles": "data/wards.json"
+      "includeFiles": "data/**"
     }
   }
 }
