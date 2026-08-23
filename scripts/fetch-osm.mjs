@@ -32,7 +32,12 @@ const ENDPOINTS = process.env.OVERPASS_URL
 let endpoint = ENDPOINTS[0]
 
 const OUT = 'data/osm.json'
-const PAUSE_MS = 4000          // Overpass asks for restraint; 48 wards is not a race.
+// Overpass throttles hard once it decides you are pushing. Backing off after a
+// 429 and easing back down costs less total time than a fixed pause that keeps
+// tripping the limit — the first run spent more time in 20s penalty waits than
+// it would have spent pausing politely.
+let pauseMs = 5000
+const PAUSE_MIN = 5000, PAUSE_MAX = 15000
 const MAX_RING_POINTS = 60     // poly: filters have a practical length limit.
 const MAX_CONSECUTIVE_FAILURES = 3
 
@@ -84,8 +89,9 @@ async function overpass(query, attempt = 0) {
 
   if (res.status === 429 || res.status === 504) {
     if (attempt >= 3) throw new Error(`Overpass ${res.status} after ${attempt} retries`)
+    pauseMs = Math.min(PAUSE_MAX, pauseMs + 2500)
     const wait = 20000 * (attempt + 1)
-    console.log(`   rate-limited (${res.status}); waiting ${wait / 1000}s`)
+    console.log(`   rate-limited (${res.status}); waiting ${wait / 1000}s, pause now ${pauseMs / 1000}s`)
     await new Promise((r) => setTimeout(r, wait))
     return overpass(query, attempt + 1)
   }
@@ -124,18 +130,20 @@ node["natural"="tree"](poly:"${poly}"); out count;
 nwr["amenity"~"^(school|college|hospital|clinic|place_of_worship|community_centre)$"](poly:"${poly}"); out count;
 node["amenity"="drinking_water"](poly:"${poly}"); out count;`
 
-const GREEN = (poly) => `[out:json][timeout:90];
+// Green geometry and public buildings arrive in one request: Overpass allows
+// several out statements per query, and halving the request count is the
+// cheapest way to stay under the rate limit.
+//
+// Public buildings are the realistic hosts for a cooling centre, so they are
+// listed by name rather than merely counted — a recommendation you cannot site
+// is not a recommendation.
+const GREEN_AND_PUBLIC = (poly) => `[out:json][timeout:120];
 (
   way["leisure"~"^(park|garden|pitch|recreation_ground)$"](poly:"${poly}");
   way["landuse"~"^(grass|forest|recreation_ground|village_green)$"](poly:"${poly}");
   way["natural"~"^(wood|scrub)$"](poly:"${poly}");
 );
-out geom;`
-
-// Public buildings are the realistic hosts for a cooling centre, so they are
-// listed by name rather than merely counted — a recommendation you cannot site
-// is not a recommendation.
-const PUBLIC = (poly) => `[out:json][timeout:90];
+out geom;
 nwr["amenity"~"^(school|college|hospital|clinic|community_centre|library)$"](poly:"${poly}");
 out center tags 40;`
 
@@ -161,17 +169,16 @@ for (const [i, feat] of wards.entries()) {
     const tally = counts.elements.filter((e) => e.type === 'count').map((e) => Number(e.tags.total) || 0)
     const [buildings = 0, trees = 0, amenities = 0, waterPoints = 0] = tally
 
-    await new Promise((r) => setTimeout(r, PAUSE_MS))
-    const green = await overpass(GREEN(poly))
-    const greenAreaKm2 = green.elements.reduce((sum, el) => {
-      if (!el.geometry || el.geometry.length < 4) return sum
+    await new Promise((r) => setTimeout(r, pauseMs))
+    const mixed = await overpass(GREEN_AND_PUBLIC(poly))
+    // Green polygons carry geometry; amenities carry an amenity tag. One
+    // response, two kinds of element, told apart by what they hold.
+    const greenAreaKm2 = mixed.elements.reduce((sum, el) => {
+      if (el.tags?.amenity || !el.geometry || el.geometry.length < 4) return sum
       return sum + ringAreaKm2(el.geometry.map((p) => [p.lon, p.lat]))
     }, 0)
-
-    await new Promise((r) => setTimeout(r, PAUSE_MS))
-    const pub = await overpass(PUBLIC(poly))
-    const publicBuildings = pub.elements
-      .filter((el) => el.tags?.name)
+    const publicBuildings = mixed.elements
+      .filter((el) => el.tags?.amenity && el.tags?.name)
       .slice(0, 12)
       .map((el) => ({ name: el.tags.name, kind: el.tags.amenity }))
 
@@ -201,9 +208,11 @@ for (const [i, feat] of wards.entries()) {
     source: 'OpenStreetMap via Overpass', fetchedAt: new Date().toISOString().slice(0, 10),
     wards: results,
   }, null, 1))
-  await new Promise((r) => setTimeout(r, PAUSE_MS))
+  await new Promise((r) => setTimeout(r, pauseMs))
 }
 
 const ok = Object.values(results).filter((r) => r.ok).length
 console.log(`\n${OUT}: ${ok}/48 wards fetched`)
+// The workflow commits this file whatever happens, so a run that is cut short
+// still moves the total forward and the next one resumes from here.
 if (ok < 48) console.log('Re-run to retry the failures; completed wards are skipped.')

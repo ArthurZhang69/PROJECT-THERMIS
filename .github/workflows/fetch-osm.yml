@@ -9,7 +9,7 @@ permissions:
 jobs:
   fetch:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 120
     steps:
       - uses: actions/checkout@v4
 
@@ -18,9 +18,11 @@ jobs:
           node-version: '22'
 
       - name: Extract per-ward counts from Overpass
+        continue-on-error: true
         run: node scripts/fetch-osm.mjs
 
       - name: Commit data/osm.json
+        if: always()
         run: |
           if [ ! -f data/osm.json ]; then
             echo "No data/osm.json produced - see the step above for why."
