@@ -890,11 +890,12 @@
   .fact-raw summary::before { content: "▸ "; }
   .fact-raw[open] summary::before { content: "▾ "; }
   .lang-toggle {
-    background: none; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px;
-    color: var(--muted); font: inherit; font-size: 10px; letter-spacing: 0.08em;
-    padding: 4px 9px; cursor: pointer; margin-left: 20px; white-space: nowrap;
+    background: rgba(201,169,110,0.14); border: 1px solid rgba(201,169,110,0.55);
+    border-radius: 5px; color: #c9a96e; font: inherit; font-size: 12px; font-weight: 600;
+    letter-spacing: 0.1em; padding: 7px 15px; cursor: pointer; margin-left: 24px;
+    white-space: nowrap; transition: background 0.15s, color 0.15s;
   }
-  .lang-toggle:hover { color: #c9a96e; border-color: rgba(201,169,110,0.5); }
+  .lang-toggle:hover { background: rgba(201,169,110,0.3); color: #f0dcb8; }
   .scope { font-size: 11px; line-height: 1.65; }
   .scope-head {
     font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase;
@@ -1009,8 +1010,8 @@
     <div class="ward-panel" id="ward-panel">
       <div class="section-label" data-i18n="secWard">Ward Information</div>
       <div class="ward-empty">
-        Click any ward on the map to view detailed heat vulnerability data.
-        <span>← Select a ward</span>
+        <span data-i18n="wardEmpty">Click any ward on the map to view detailed heat vulnerability data.</span>
+        <span data-i18n="wardEmptyHint">← Select a ward</span>
       </div>
     </div>
 
@@ -1156,6 +1157,7 @@ const map = new mapboxgl.Map({
 
 map.addControl(new mapboxgl.NavigationControl({ showCompass: false }), 'top-right');
 
+const LEGEND_KEY = { lst: 'layerLstName', hvi: 'layerHviName', ndvi: 'layerNdviName' };
 let currentLayer = 'lst';
 let loadedData = {};
 let hoveredId    = null;
@@ -1413,7 +1415,7 @@ function switchLayer(key) {
   });
 
   // Update legend
-  document.getElementById('legend-title').textContent = cfg.title;
+  document.getElementById('legend-title').textContent = t(LEGEND_KEY[currentLayer] || 'layerLstName');
   document.getElementById('legend-bar').style.background = cfg.gradient;
   document.getElementById('legend-min').textContent = cfg.min;
   document.getElementById('legend-mid').textContent = cfg.mid;
@@ -1501,24 +1503,24 @@ function showWardInfo(props, layerKey, lngLat) {
   const smallCards = [];
   if (layerKey !== 'lst') {
     smallCards.push(`<div class="metric-card">
-        <div class="metric-label">LST Mean</div>
+        <div class="metric-label">${t('cardLstMean')}</div>
         <div class="metric-value red" style="font-size:16px">${lstFmt}</div>
-        <div class="metric-sub">Summer 2019–22</div>
+        <div class="metric-sub">${t('cardLstSub')}</div>
       </div>`);
   }
   if (layerKey !== 'ndvi') {
     smallCards.push(`<div class="metric-card">
         <div class="metric-label">NDVI</div>
         <div class="metric-value teal" style="font-size:16px">${ndviFmt}</div>
-        <div class="metric-sub">Adaptive capacity</div>
+        <div class="metric-sub">${t('cardNdviSub')}</div>
       </div>`);
   }
   if (layerKey !== 'hvi') {
-    const hviLabels = ['', 'Very Low', 'Low', 'Moderate', 'High', 'Very High'];
+    const hviLabels = t('hviLevels');
     smallCards.push(`<div class="metric-card" style="border-color:${hviColor}44">
-        <div class="metric-label">HVI Class</div>
+        <div class="metric-label">${t('cardHviClass')}</div>
         <div class="metric-value" style="font-size:16px;color:${hviColor}">${hviClass} / 5</div>
-        <div class="metric-sub" style="color:${hviColor}99">${hviLabels[hviClass] || 'Moderate'}</div>
+        <div class="metric-sub" style="color:${hviColor}99">${hviLabels[hviClass] || hviLabels[3]}</div>
       </div>`);
   }
 
@@ -1541,6 +1543,7 @@ function showWardInfo(props, layerKey, lngLat) {
   `;
 
   // Prepare AI panel with ward images + skeleton loader
+  if (typeof applyLang === 'function') applyLang();
   const aiPanelBody = document.getElementById('ai-panel-body');
   const aiStatus    = document.getElementById('ai-status');
   if (aiPanelBody) {
@@ -1842,6 +1845,15 @@ const I18N = {
     working: 'Working…',
     lowest: 'lowest', highest: 'highest',
     wardsUnit: 'wards', medianRange: 'median (range)',
+    cardLstMean: 'LST Mean', cardLstSub: 'Summer 2019–22',
+    cardNdviSub: 'Adaptive capacity', cardHviClass: 'HVI Class',
+    hviLevels: ['', 'Very Low', 'Low', 'Moderate', 'High', 'Very High'],
+    wardEmpty: 'Click any ward on the map to view detailed heat vulnerability data.',
+    wardEmptyHint: '← Select a ward',
+    filterMatched: 'Wards matching', filterNone: 'No ward satisfies all of these at once.',
+    filterTruncated: 'Showing the first 12 matches.',
+    similarLabel: 'Measured · closest to',
+    similarCaveat: 'Matched on one variable only. Industrial land use, building materials and surface cover are uncontrolled, so this is an association, not a cause.',
     mLst: 'Land surface temp', mNdvi: 'NDVI', mPop: 'Population', mDens: 'Density', mHvi: 'HVI',
     mVsMedian: 'vs city median',
     scopeCan: 'This assistant can answer',
@@ -1849,6 +1861,8 @@ const I18N = {
       'One ward — every measured value, its rank and how far it sits from the city median',
       'Two wards side by side',
       'Which wards are highest or lowest on temperature, vegetation, population or vulnerability',
+      'Wards meeting several conditions at once — hot but not classed vulnerable, dense but still green',
+      'Wards resembling one ward on one measure while differing on another',
       'The city as a whole — median and range across all 48 wards',
     ],
     scopeCant: 'It will not answer',
@@ -1858,7 +1872,7 @@ const I18N = {
       'Anything outside Ahmedabad, or outside these four measurements',
     ],
     scopeNote: 'Every figure is computed from the ward table. The model chooses what to look up and writes the sentence around it; it never produces a number.',
-    egs: ['Tell me about Odhav', 'Odhav versus Paldi', 'Which wards are coolest'],
+    egs: ['Which wards are hot but not classed vulnerable', 'Somewhere like Odhav but greener', 'Dense wards that are still green'],
   },
   zh: {
     _toggle: 'EN',
@@ -1894,6 +1908,15 @@ const I18N = {
     working: '处理中…',
     lowest: '最低', highest: '最高',
     wardsUnit: '个区', medianRange: '中位数（范围）',
+    cardLstMean: '地表温度均值', cardLstSub: '2019–22 夏季',
+    cardNdviSub: '适应能力', cardHviClass: '脆弱性等级',
+    hviLevels: ['', '很低', '低', '中等', '高', '很高'],
+    wardEmpty: '点击地图上任意行政区，查看详细的高温脆弱性数据。',
+    wardEmptyHint: '← 请选择一个区',
+    filterMatched: '满足条件的区', filterNone: '没有任何一个区同时满足这些条件。',
+    filterTruncated: '仅显示前 12 个。',
+    similarLabel: '实测 · 最接近',
+    similarCaveat: '只在一个变量上做了匹配。产业结构、建筑材质、下垫面等因素未被控制，所以这是相关，不是因果。',
     mLst: '地表温度', mNdvi: 'NDVI', mPop: '人口', mDens: '人口密度', mHvi: '脆弱性指数',
     mVsMedian: '与全市中位数之差',
     scopeCan: '这个助手能回答',
@@ -1901,6 +1924,8 @@ const I18N = {
       '单个区 —— 全部实测值、在 48 个区中的名次、与全市中位数的差距',
       '两个区的并排对比',
       '温度、植被、人口、脆弱性四项里谁最高谁最低',
+      '同时满足多个条件的区 —— 比如「很热但脆弱性不高」「密度大但绿化仍好」',
+      '在某一项上与某个区相似、但在另一项上差别大的区',
       '全市整体 —— 48 个区的中位数与取值范围',
     ],
     scopeCant: '它不会回答',
@@ -1910,7 +1935,7 @@ const I18N = {
       '艾哈迈达巴德以外的地方，或这四项测量以外的内容',
     ],
     scopeNote: '每个数字都由行政区数据表算出。模型只决定查什么、并把结果写成一句话，它不产生任何数字。',
-    egs: ['介绍一下 Odhav', 'Odhav 和 Paldi 比较', '哪些区最凉快'],
+    egs: ['哪些区很热但脆弱性等级不高', '和 Odhav 相似但绿化更好的区', '人口密集但绿化仍然好的区'],
   },
 };
 
@@ -1937,6 +1962,10 @@ function applyLang() {
   document.querySelectorAll('[data-i18n]').forEach((el) => { el.textContent = t(el.dataset.i18n); });
   const tog = document.getElementById('lang-toggle');
   if (tog) tog.textContent = t('_toggle');
+  // The legend title is written by switchLayer, so it carries no data-i18n
+  // marker and has to be refreshed explicitly.
+  const legend = document.getElementById('legend-title');
+  if (legend) legend.textContent = t(LEGEND_KEY[currentLayer] || 'layerLstName');
   const input = document.getElementById('ai-ask-input');
   if (input) input.placeholder = t('askPlaceholder');
   const btn = document.getElementById('ai-ask-btn');
@@ -2047,12 +2076,59 @@ function renderCityFacts(f) {
     </div>`;
 }
 
+const OP_TEXT = { gt: '>', gte: '≥', lt: '<', lte: '≤' };
+
+function renderFilterFacts(f) {
+  const cond = f.conditions.map((c) =>
+    `${escapeHtml(metricLabel(c.metric))} ${OP_TEXT[c.op]} ${fmtValue(c.metric, c.threshold)}`
+  ).join(' · ');
+  const cols = f.conditions.map((c) => c.metric);
+  const rows = f.matches.map((m) =>
+    `<tr><td>${escapeHtml(m.ward)}</td>${cols.map((c) => `<td class="n">${fmtValue(c, m[c])}</td>`).join('')}</tr>`
+  ).join('');
+  const none = `<div class="ai-panel-text" style="color:var(--muted)">${t('filterNone')}</div>`;
+  return `
+    <div class="fact-block">
+      <div class="fact-block-label">${t('measuredPlain')} · ${escapeHtml(cond)}</div>
+      <div class="fact-row"><span class="k">${t('filterMatched')}</span><span class="v">${f.matchCount} / ${f.of}</span></div>
+      ${f.matchCount ? `<table class="fact-table" style="margin-top:6px">${rows}</table>` : none}
+      ${f.truncated ? `<div class="interp-caveat" style="border-top:none;padding-top:6px">${t('filterTruncated')}</div>` : ''}
+      ${rawBlock(f)}
+    </div>`;
+}
+
+function renderSimilarFacts(f) {
+  const rows = f.matches.map((m) => `<tr>
+      <td>${escapeHtml(m.ward)}</td>
+      <td class="n">${fmtValue(f.contrastedOn, m[f.contrastedOn])}</td>
+      <td class="n">${fmtValue(f.outcome, m[f.outcome])}</td>
+      <td class="r">${m.outcomeGap > 0 ? '+' : ''}${m.outcomeGap}</td>
+    </tr>`).join('');
+  return `
+    <div class="fact-block">
+      <div class="fact-block-label">${t('similarLabel')} ${escapeHtml(f.ward)} · ${escapeHtml(metricLabel(f.matchedOn))}</div>
+      <table class="fact-table">
+        <tr>
+          <td style="color:#c9a96e">${escapeHtml(f.ward)}</td>
+          <td class="n" style="color:#c9a96e">${fmtValue(f.contrastedOn, f.reference[f.contrastedOn])}</td>
+          <td class="n" style="color:#c9a96e">${fmtValue(f.outcome, f.reference[f.outcome])}</td>
+          <td class="r"></td>
+        </tr>
+        ${rows}
+      </table>
+      <div class="interp-caveat">${t('similarCaveat')}</div>
+      ${rawBlock(f)}
+    </div>`;
+}
+
 function renderFactsFor(route, facts) {
   if (!facts || !route) return '';
   try {
     if (route.intent === 'ward') return renderFactBlock(lookupFacts(route.ward)) + rawBlock(facts);
     if (route.intent === 'rank') return renderRankFacts(facts);
     if (route.intent === 'compare') return renderCompareFacts(facts);
+    if (route.intent === 'filter') return renderFilterFacts(facts);
+    if (route.intent === 'similar') return renderSimilarFacts(facts);
     if (route.intent === 'city') return renderCityFacts(facts);
   } catch (e) {
     console.warn('fact rendering failed:', e);
@@ -2109,8 +2185,8 @@ function resetWardPanel() {
   document.getElementById('ward-panel').innerHTML = `
     <div class="section-label" data-i18n="secWard">Ward Information</div>
     <div class="ward-empty">
-      Click any ward on the map to view detailed heat vulnerability data.
-      <span>← Select a ward</span>
+      ${t('wardEmpty')}
+      <span>${t('wardEmptyHint')}</span>
     </div>
   `;
   const aiPanelBody = document.getElementById('ai-panel-body');

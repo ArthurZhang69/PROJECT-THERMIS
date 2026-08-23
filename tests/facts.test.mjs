@@ -77,3 +77,51 @@ test('an unknown ward yields no facts rather than the wrong ward', () => {
   assert.equal(gatherFacts({ intent: 'ward', ward: 'Atlantis' }), null)
   assert.ok(gatherFacts({ intent: 'ward', ward: 'Naroda' }))
 })
+
+// The two capabilities that justify a language interface at all. A ranking or
+// a single ward can be a button; "hot but not classed vulnerable" cannot,
+// because the combination space is far larger than any menu.
+test('multi-condition filtering finds the tension cases', async () => {
+  const { filterWards } = await import('../lib/facts.mjs')
+  const hotNotVulnerable = filterWards([
+    { metric: 'lst', op: 'gt', ref: 'median' },
+    { metric: 'hvi', op: 'lt', ref: 'median' },
+  ])
+  assert.ok(hotNotVulnerable.matchCount > 0 && hotNotVulnerable.matchCount < 48)
+  // Every returned ward really satisfies every condition.
+  const { WARDS, CITY } = await import('../lib/facts.mjs')
+  for (const m of hotNotVulnerable.matches) {
+    const w = WARDS.find((x) => x.ward === m.ward)
+    assert.ok(w.lst > CITY.lst.median, `${m.ward} lst`)
+    assert.ok(w.hvi < CITY.hvi.median, `${m.ward} hvi`)
+  }
+})
+
+test('a filter refuses conditions it cannot evaluate rather than guessing', async () => {
+  const { filterWards } = await import('../lib/facts.mjs')
+  assert.equal(filterWards([{ metric: 'nonsense', op: 'gt', ref: 'median' }]), null)
+  assert.equal(filterWards([{ metric: 'lst', op: 'approximately', ref: 'median' }]), null)
+  assert.equal(filterWards([{ metric: 'lst', op: 'gt', ref: 'warm-ish' }]), null)
+  assert.equal(filterWards([]), null)
+})
+
+test('an impossible filter reports zero matches, not an error', async () => {
+  const { filterWards } = await import('../lib/facts.mjs')
+  const none = filterWards([
+    { metric: 'lst', op: 'gt', ref: 'max' },
+    { metric: 'ndvi', op: 'lt', ref: 'min' },
+  ])
+  assert.equal(none.matchCount, 0)
+  assert.deepEqual(none.matches, [])
+})
+
+test('the router accepts filter and similar, and clamps both', async () => {
+  const { parseRoute, gatherFacts } = await import('../api/analyze.js')
+  const f = parseRoute('{"intent":"filter","conditions":[{"metric":"lst","op":"gt","ref":"median"},{"metric":"junk","op":"gt","ref":"median"}]}')
+  assert.equal(f.conditions.length, 1, 'the unusable condition is dropped, not guessed at')
+  assert.ok(gatherFacts(f).matchCount > 0)
+
+  const sim = parseRoute('{"intent":"similar","ward":"Odhav","differOn":"junk"}')
+  assert.equal(sim.differOn, 'ndvi', 'falls back to a real metric')
+  assert.ok(gatherFacts(sim).matches.length > 0)
+})

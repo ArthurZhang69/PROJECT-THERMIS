@@ -1,6 +1,6 @@
 import {
   getWard, compareWards, findSimilar, rankWards, cityStats, resolveWard,
-  checkNumbers, checkCausalLanguage, WARDS,
+  filterWards, checkNumbers, checkCausalLanguage, WARDS,
 } from '../lib/facts.mjs'
 
 const WARD_NAMES = WARDS.map((w) => w.ward)
@@ -21,6 +21,10 @@ Decide "intent":
 - "ward"     — about one named ward.
 - "compare"  — contrasts two named wards.
 - "rank"     — asks which wards are highest/lowest on something.
+- "filter"   — asks which wards satisfy two or more conditions at once
+               ("hot but not classed vulnerable", "dense and still green").
+- "similar"  — asks for wards resembling one ward on some measure while
+               differing on another ("somewhere like Odhav but greener").
 - "city"     — about the city as a whole or the dataset itself.
 - "help"     — about the map, the layers, the score, or how to use this.
 - "unclear"  — you cannot tell.
@@ -29,6 +33,8 @@ Shapes:
 {"intent":"ward","ward":string}
 {"intent":"compare","wardA":string,"wardB":string}
 {"intent":"rank","metric":"lst"|"ndvi"|"population"|"popDensity"|"hvi","order":"desc"|"asc","n":integer 3-10}
+{"intent":"filter","conditions":[{"metric":<metric>,"op":"gt"|"gte"|"lt"|"lte","ref":"min"|"q1"|"median"|"q3"|"max"|"mean"|<number>}]}
+{"intent":"similar","ward":string,"similarOn":<metric>,"differOn":<metric>,"outcome":<metric>}
 {"intent":"city"}
 {"intent":"help","topic":string}
 {"intent":"unclear","clarify":string}
@@ -38,6 +44,13 @@ ${WARD_NAMES.join(', ')}
 
 "hottest"/"最热" is metric "lst" order "desc". "greenest"/"绿化最好" is "ndvi" order "desc".
 "most vulnerable"/"最脆弱" is "hvi" order "desc".
+
+For "filter", give one condition per clause the user stated, at most four.
+Prefer a named quantile over a made-up number: "hotter than average" is
+{"metric":"lst","op":"gt","ref":"median"}.
+
+For "similar", default similarOn to "popDensity", differOn to "ndvi" and
+outcome to "lst" unless the question names others.
 
 You never answer the question and never state a figure. Routing only.`
 
@@ -66,9 +79,28 @@ const ALLOWED_METRICS = ['lst', 'ndvi', 'population', 'popDensity', 'hvi']
 
 export function parseRoute(content) {
   const raw = typeof content === 'string' ? JSON.parse(content) : content
-  const intent = ['ward', 'compare', 'rank', 'city', 'help', 'unclear'].includes(raw?.intent) ? raw.intent : 'unclear'
+  const intent = ['ward', 'compare', 'rank', 'filter', 'similar', 'city', 'help', 'unclear'].includes(raw?.intent) ? raw.intent : 'unclear'
   if (intent === 'ward') return { intent, ward: str(raw.ward, 60) }
   if (intent === 'compare') return { intent, wardA: str(raw.wardA, 60), wardB: str(raw.wardB, 60) }
+  if (intent === 'filter') {
+    const conditions = Array.isArray(raw.conditions) ? raw.conditions.slice(0, 4).map((c) => ({
+      metric: ALLOWED_METRICS.includes(c?.metric) ? c.metric : null,
+      op: ['gt', 'gte', 'lt', 'lte'].includes(c?.op) ? c.op : null,
+      ref: typeof c?.ref === 'number' ? c.ref
+        : (['min', 'q1', 'median', 'q3', 'max', 'mean'].includes(c?.ref) ? c.ref : null),
+    })).filter((c) => c.metric && c.op && c.ref !== null) : []
+    return { intent, conditions }
+  }
+  if (intent === 'similar') {
+    const metric = (v, fallback) => ALLOWED_METRICS.includes(v) ? v : fallback
+    return {
+      intent,
+      ward: str(raw.ward, 60),
+      similarOn: metric(raw.similarOn, 'popDensity'),
+      differOn: metric(raw.differOn, 'ndvi'),
+      outcome: metric(raw.outcome, 'lst'),
+    }
+  }
   if (intent === 'rank') {
     const n = Number(raw.n)
     return {
@@ -89,6 +121,10 @@ export function gatherFacts(route) {
     case 'ward': return getWard(route.ward)
     case 'compare': return compareWards(route.wardA, route.wardB)
     case 'rank': return rankWards(route.metric, { n: route.n, order: route.order })
+    case 'filter': return route.conditions?.length ? filterWards(route.conditions) : null
+    case 'similar': return findSimilar(route.ward, {
+      similarOn: route.similarOn, differOn: route.differOn, outcome: route.outcome, k: 3,
+    })
     case 'city': return cityStats()
     default: return null
   }
