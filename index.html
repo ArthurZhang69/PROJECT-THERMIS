@@ -889,6 +889,26 @@
   .fact-raw summary::-webkit-details-marker { display: none; }
   .fact-raw summary::before { content: "▸ "; }
   .fact-raw[open] summary::before { content: "▾ "; }
+  .lang-toggle {
+    background: none; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px;
+    color: var(--muted); font: inherit; font-size: 10px; letter-spacing: 0.08em;
+    padding: 4px 9px; cursor: pointer; margin-left: 20px; white-space: nowrap;
+  }
+  .lang-toggle:hover { color: #c9a96e; border-color: rgba(201,169,110,0.5); }
+  .scope { font-size: 11px; line-height: 1.65; }
+  .scope-head {
+    font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: #c9a96e; margin: 12px 0 5px;
+  }
+  .scope-head.no { color: var(--muted); }
+  .scope ul { margin: 0; padding-left: 15px; }
+  .scope li { margin-bottom: 3px; }
+  .scope-egs { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 9px; }
+  .scope-eg {
+    background: rgba(201,169,110,0.1); border: 1px solid rgba(201,169,110,0.28);
+    color: #c9a96e; border-radius: 11px; padding: 3px 9px; font-size: 10px; cursor: pointer;
+  }
+  .scope-eg:hover { background: rgba(201,169,110,0.2); }
   .fact-raw pre {
     font-size: 10px; white-space: pre-wrap; margin: 6px 0 0;
     color: var(--muted); max-height: 220px; overflow: auto;
@@ -912,24 +932,25 @@
     <img src="tag_logo_v3.svg" alt="TAG · UCL CASA" style="height: 170px; width: auto; display: block; margin-top: 12px;">
     <div style="margin-left: -5px;">
       <div class="header-title">PROJECT THERMIS</div>
-      <div class="header-sub">Ahmedabad Heat Vulnerability · 2026</div>
+      <div class="header-sub" data-i18n="headerSub">Ahmedabad Heat Vulnerability · 2026</div>
     </div>
   </div>
   <div class="header-right">
     <div class="header-stat">
       <div class="val" id="stat-deaths">1,344</div>
-      <div class="lbl">Lives lost · May 2010</div>
+      <div class="lbl" data-i18n="statDeaths">Lives lost · May 2010</div>
     </div>
     <div class="header-divider"></div>
     <div class="header-stat">
       <div class="val" style="color:var(--red)" id="stat-highrisk">—</div>
-      <div class="lbl">High-risk wards (HVI 4–5)</div>
+      <div class="lbl" data-i18n="statHighRisk">High-risk wards (HVI 4–5)</div>
     </div>
     <div class="header-divider"></div>
     <div class="header-stat">
       <div class="val" style="color:var(--gold)" id="stat-avglst">—</div>
-      <div class="lbl">City avg LST · Summer</div>
+      <div class="lbl" data-i18n="statLst">City avg LST · Summer</div>
     </div>
+    <button class="lang-toggle" id="lang-toggle" type="button">中文</button>
   </div>
 </header>
 
@@ -941,13 +962,13 @@
 
     <!-- LAYERS -->
     <div class="sidebar-section">
-      <div class="section-label">Data Layers</div>
+      <div class="section-label" data-i18n="secLayers">Data Layers</div>
 
       <button class="layer-btn active" data-layer="lst" onclick="switchLayer('lst')">
         <div class="layer-dot" style="background: linear-gradient(135deg, #040274, #ff0000)"></div>
         <div class="layer-info">
-          <span class="layer-name">Land Surface Temperature</span>
-          <span class="layer-desc">Landsat 8 · 2019–2022 summer mean</span>
+          <span class="layer-name" data-i18n="layerLstName">Land Surface Temperature</span>
+          <span class="layer-desc" data-i18n="layerLstDesc">Landsat 8 · 2019–2022 summer mean</span>
         </div>
         <div class="layer-active-dot"></div>
       </button>
@@ -955,7 +976,7 @@
       <button class="layer-btn" data-layer="hvi" onclick="switchLayer('hvi')">
         <div class="layer-dot" style="background: linear-gradient(135deg, #ffffb2, #bd0026)"></div>
         <div class="layer-info">
-          <span class="layer-name">Heat Vulnerability Index</span>
+          <span class="layer-name" data-i18n="layerHviName">Heat Vulnerability Index</span>
           <span class="layer-desc">LST × 0.5 + Pop × 0.3 − NDVI × 0.2</span>
         </div>
         <div class="layer-active-dot"></div>
@@ -964,8 +985,8 @@
       <button class="layer-btn" data-layer="ndvi" onclick="switchLayer('ndvi')">
         <div class="layer-dot" style="background: linear-gradient(135deg, #ffffcc, #31a354)"></div>
         <div class="layer-info">
-          <span class="layer-name">NDVI · Adaptive Capacity</span>
-          <span class="layer-desc">Landsat 8 · vegetation cover index</span>
+          <span class="layer-name" data-i18n="layerNdviName">NDVI · Adaptive Capacity</span>
+          <span class="layer-desc" data-i18n="layerNdviDesc">Landsat 8 · vegetation cover index</span>
         </div>
         <div class="layer-active-dot"></div>
       </button>
@@ -986,7 +1007,7 @@
 
     <!-- WARD INFO -->
     <div class="ward-panel" id="ward-panel">
-      <div class="section-label">Ward Information</div>
+      <div class="section-label" data-i18n="secWard">Ward Information</div>
       <div class="ward-empty">
         Click any ward on the map to view detailed heat vulnerability data.
         <span>← Select a ward</span>
@@ -995,7 +1016,7 @@
 
     <!-- DATA PROVIDERS -->
     <div class="data-providers">
-      <div class="section-label" style="margin-bottom:10px">Data Providers</div>
+      <div class="section-label" style="margin-bottom:10px" data-i18n="secProviders">Data Providers</div>
       <div class="provider-row">
         <svg viewBox="0 0 24 24" class="provider-icon" fill="none">
           <!-- GEE gear-earth icon simplified -->
@@ -1005,7 +1026,7 @@
         </svg>
         <div class="provider-info">
           <div class="provider-name">Google Earth Engine</div>
-          <div class="provider-role">Spatial Computing</div>
+          <div class="provider-role" data-i18n="provGeeRole">Spatial Computing</div>
         </div>
       </div>
       <div class="provider-row">
@@ -1013,8 +1034,8 @@
           <path d="M12 3L14.5 9.5L21 12L14.5 14.5L12 21L9.5 14.5L3 12L9.5 9.5L12 3Z" fill="#c9874a"/>
         </svg>
         <div class="provider-info">
-          <div class="provider-name">Claude · Anthropic</div>
-          <div class="provider-role">AI Analysis</div>
+          <div class="provider-name">DeepSeek</div>
+          <div class="provider-role" data-i18n="provAiRole">AI Analysis</div>
         </div>
       </div>
       <div class="provider-row">
@@ -1026,7 +1047,7 @@
         </svg>
         <div class="provider-info">
           <div class="provider-name">Landsat 8 · USGS</div>
-          <div class="provider-role">Satellite Imagery</div>
+          <div class="provider-role" data-i18n="provSatRole">Satellite Imagery</div>
         </div>
       </div>
     </div>
@@ -1044,7 +1065,7 @@
         <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z"
               fill="#c9a96e" opacity="0.9"/>
       </svg>
-      <span class="ai-panel-title">AI Analysis</span>
+      <span class="ai-panel-title" data-i18n="aiTitle">AI Analysis</span>
       <span class="ai-panel-status" id="ai-status"></span>
     </div>
     <div class="ai-panel-body" id="ai-panel-body">
@@ -1505,7 +1526,7 @@ function showWardInfo(props, layerKey, lngLat) {
   const wardId   = props.sourcewa_1 || props.ward_id || props.FID || props.OBJECTID || '—';
 
   panel.innerHTML = `
-    <div class="section-label">Ward Information</div>
+    <div class="section-label" data-i18n="secWard">Ward Information</div>
     <div class="ward-name">${wardName}</div>
     <div class="ward-id">WARD ID · ${wardId} · AMC</div>
 
@@ -1695,13 +1716,13 @@ function renderFactBlock(w) {
   const signed = (v, d) => (v >= 0 ? '+' : '') + v.toFixed(d);
   return `
     <div class="fact-block">
-      <div class="fact-block-label">Measured · Sentinel-2 / MODIS</div>
-      ${factRow('Land surface temp', `${w.lst.toFixed(2)}°C`, w.lstRank)}
-      ${factRow('vs city median', `${signed(w.lstVsMedian, 2)}°C`)}
-      ${factRow('NDVI', w.ndvi.toFixed(3), w.ndviRank)}
-      ${factRow('Population', w.population.toLocaleString(), w.populationRank)}
-      ${factRow('Density', `${w.popDensity.toLocaleString()}/km²`, w.popDensityRank)}
-      ${factRow('HVI', `${w.hvi.toFixed(3)} (class ${w.hviClass})`, w.hviRank)}
+      <div class="fact-block-label">${t('measured')}</div>
+      ${factRow(t('mLst'), `${w.lst.toFixed(2)}°C`, w.lstRank)}
+      ${factRow(t('mVsMedian'), `${signed(w.lstVsMedian, 2)}°C`)}
+      ${factRow(t('mNdvi'), w.ndvi.toFixed(3), w.ndviRank)}
+      ${factRow(t('mPop'), w.population.toLocaleString(), w.populationRank)}
+      ${factRow(t('mDens'), `${w.popDensity.toLocaleString()}/km²`, w.popDensityRank)}
+      ${factRow(t('mHvi'), `${w.hvi.toFixed(3)} (class ${w.hviClass})`, w.hviRank)}
     </div>`;
 }
 
@@ -1709,9 +1730,9 @@ function renderInterp(text, { caveat, source } = {}) {
   const html = String(text).trim().replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
   return `
     <div class="interp-block">
-      <div class="interp-block-label">Interpretation${source ? ' · ' + source : ''}</div>
+      <div class="interp-block-label">${t('interpretation')}${source ? ' · ' + source : ''}</div>
       <div class="ai-panel-text">${html}</div>
-      <div class="interp-caveat">${caveat || 'Cross-sectional remote sensing shows association, not cause. Figures above are measured; this paragraph is written from them.'}</div>
+      <div class="interp-caveat">${caveat || t('caveat')}</div>
     </div>`;
 }
 
@@ -1719,7 +1740,7 @@ async function askAnalyzer(question) {
   const res = await fetch('/api/analyze', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ question }),
+    body: JSON.stringify({ question, lang: LANG }),
   });
   if (!res.ok) {
     const reason = await res.json().then(b => b && b.reason).catch(() => null);
@@ -1738,22 +1759,23 @@ async function fetchAIAnalysis(wardName, hviClass, props, layerKey) {
 
   // Measurements render straight away; nothing below can change them.
   if (factHtml) {
-    bodyEl.innerHTML = factHtml + '<div class="ai-panel-text" style="color:var(--muted)">Interpreting…</div>';
+    bodyEl.innerHTML = factHtml + `<div class="ai-panel-text" style="color:var(--muted)">${t('interpreting')}</div>`;
   }
 
   try {
     const out = await askAnalyzer(`Describe ${wardName} and how it compares with the rest of Ahmedabad.`);
+    bodyEl.dataset.done = '1';
     if (out.answer) {
-      statusEl.textContent = 'Live analysis';
+      statusEl.textContent = t('statusLive');
       bodyEl.innerHTML = factHtml + renderInterp(out.answer);
       return;
     }
     // The writer produced something the checks rejected. Say so rather than
     // printing it — a rejected sentence is not a lesser answer, it is a wrong one.
     if (out.rejected) {
-      statusEl.textContent = 'Interpretation withheld';
+      statusEl.textContent = t('statusWithheld');
       bodyEl.innerHTML = factHtml +
-        `<div class="interp-caveat">A generated interpretation failed the fact and wording checks and was discarded. The measurements above are unaffected.</div>`;
+        `<div class="interp-caveat">${t('rejected')}</div>`;
       return;
     }
   } catch (e) {
@@ -1766,18 +1788,184 @@ async function fetchAIAnalysis(wardName, hviClass, props, layerKey) {
   const staticText = WARD_ANALYSIS[wardName]
     || WARD_ANALYSIS[Object.keys(WARD_ANALYSIS).find(k => wardName && wardName.toLowerCase().includes(k.toLowerCase()))];
   if (staticText) {
-    statusEl.textContent = 'Offline summary';
+    statusEl.textContent = t('statusOffline');
     bodyEl.innerHTML = factHtml + renderInterp(staticText, {
-      source: 'pre-generated',
-      caveat: 'Live analysis is unavailable, so this is a reviewed summary prepared in advance. Measurements above are read from the dataset.',
+      source: t('sourcePregen'),
+      caveat: t('caveatOffline'),
     });
     return;
   }
 
   statusEl.textContent = '';
   bodyEl.innerHTML = factHtml ||
-    `<div class="ai-panel-text" style="color:var(--muted)">No data for this ward.</div>`;
+    `<div class="ai-panel-text" style="color:var(--muted)">${t('noData')}</div>`;
 }
+
+// ── LANGUAGE ──────────────────────────────────────────────────
+// The interface and the generated prose follow the same setting: the language
+// choice is passed to the analyzer, so a Chinese reader gets a Chinese
+// interpretation of the same computed figures. The figures themselves are
+// language-independent, which is one more reason they are computed and not
+// written.
+const I18N = {
+  en: {
+    _toggle: '中文',
+    headerSub: 'Ahmedabad Heat Vulnerability · 2026',
+    statDeaths: 'Lives lost · May 2010',
+    statHighRisk: 'High-risk wards (HVI 4–5)',
+    statLst: 'City avg LST · Summer',
+    secLayers: 'Data Layers', secWard: 'Ward Information', secProviders: 'Data Providers',
+    layerLstName: 'Land Surface Temperature', layerLstDesc: 'Landsat 8 · 2019–2022 summer mean',
+    layerHviName: 'Heat Vulnerability Index', layerNdviName: 'NDVI · Adaptive Capacity',
+    layerNdviDesc: 'Landsat 8 · vegetation cover index',
+    provGeeRole: 'Spatial Computing', provAiRole: 'AI Analysis', provSatRole: 'Satellite Imagery',
+    aiTitle: 'AI Analysis',
+    askPlaceholder: 'Ask about a ward, or compare two',
+    askBtn: 'Ask',
+    measured: 'Measured · Sentinel-2 / MODIS',
+    measuredSide: 'Measured · side by side',
+    measuredPlain: 'Measured',
+    interpretation: 'Interpretation',
+    interpreting: 'Interpreting…',
+    toolOutput: 'tool output',
+    cityMedian: 'City median',
+    statusLive: 'Live analysis',
+    statusOffline: 'Offline summary',
+    statusWithheld: 'Interpretation withheld',
+    sourcePregen: 'pre-generated',
+    caveat: 'Cross-sectional remote sensing shows association, not cause. Figures above are measured; this paragraph is written from them.',
+    caveatOffline: 'Live analysis is unavailable, so this is a reviewed summary prepared in advance. Measurements above are read from the dataset.',
+    rejected: 'A generated interpretation failed the fact and wording checks and was discarded. The measurements above are unaffected.',
+    rejectedShort: 'The generated answer failed the fact and wording checks and was discarded.',
+    unreachable: 'Analyzer unreachable',
+    noData: 'No data for this ward.',
+    working: 'Working…',
+    lowest: 'lowest', highest: 'highest',
+    wardsUnit: 'wards', medianRange: 'median (range)',
+    mLst: 'Land surface temp', mNdvi: 'NDVI', mPop: 'Population', mDens: 'Density', mHvi: 'HVI',
+    mVsMedian: 'vs city median',
+    scopeCan: 'This assistant can answer',
+    scopeCanList: [
+      'One ward — every measured value, its rank and how far it sits from the city median',
+      'Two wards side by side',
+      'Which wards are highest or lowest on temperature, vegetation, population or vulnerability',
+      'The city as a whole — median and range across all 48 wards',
+    ],
+    scopeCant: 'It will not answer',
+    scopeCantList: [
+      'Why a ward is hot — this data shows association, never cause',
+      'Forecasts, or the effect of an intervention',
+      'Anything outside Ahmedabad, or outside these four measurements',
+    ],
+    scopeNote: 'Every figure is computed from the ward table. The model chooses what to look up and writes the sentence around it; it never produces a number.',
+    egs: ['Tell me about Odhav', 'Odhav versus Paldi', 'Which wards are coolest'],
+  },
+  zh: {
+    _toggle: 'EN',
+    headerSub: '艾哈迈达巴德 高温脆弱性 · 2026',
+    statDeaths: '死亡人数 · 2010年5月',
+    statHighRisk: '高风险区（HVI 4–5）',
+    statLst: '全市平均地表温度 · 夏季',
+    secLayers: '数据图层', secWard: '行政区信息', secProviders: '数据来源',
+    layerLstName: '地表温度', layerLstDesc: 'Landsat 8 · 2019–2022 夏季均值',
+    layerHviName: '高温脆弱性指数', layerNdviName: 'NDVI · 适应能力',
+    layerNdviDesc: 'Landsat 8 · 植被覆盖指数',
+    provGeeRole: '空间计算', provAiRole: 'AI 分析', provSatRole: '卫星影像',
+    aiTitle: 'AI 分析',
+    askPlaceholder: '问某个区，或让两个区对比',
+    askBtn: '提问',
+    measured: '实测 · Sentinel-2 / MODIS',
+    measuredSide: '实测 · 并排对比',
+    measuredPlain: '实测',
+    interpretation: '解读',
+    interpreting: '正在解读…',
+    toolOutput: '工具原始输出',
+    cityMedian: '全市中位数',
+    statusLive: '实时分析',
+    statusOffline: '离线摘要',
+    statusWithheld: '解读已拦截',
+    sourcePregen: '预先生成',
+    caveat: '横截面遥感数据只能呈现相关性，不构成因果结论。上方数字为实测值，本段文字由这些数字写成。',
+    caveatOffline: '实时分析不可用，这是预先生成并经过核对的摘要。上方数字仍直接读自数据集。',
+    rejected: '一段生成的解读未通过事实与措辞检查，已丢弃。上方的实测数字不受影响。',
+    rejectedShort: '生成的回答未通过事实与措辞检查，已丢弃。',
+    unreachable: '分析服务不可达',
+    noData: '该区暂无数据。',
+    working: '处理中…',
+    lowest: '最低', highest: '最高',
+    wardsUnit: '个区', medianRange: '中位数（范围）',
+    mLst: '地表温度', mNdvi: 'NDVI', mPop: '人口', mDens: '人口密度', mHvi: '脆弱性指数',
+    mVsMedian: '与全市中位数之差',
+    scopeCan: '这个助手能回答',
+    scopeCanList: [
+      '单个区 —— 全部实测值、在 48 个区中的名次、与全市中位数的差距',
+      '两个区的并排对比',
+      '温度、植被、人口、脆弱性四项里谁最高谁最低',
+      '全市整体 —— 48 个区的中位数与取值范围',
+    ],
+    scopeCant: '它不会回答',
+    scopeCantList: [
+      '某个区「为什么」热 —— 这份数据只能显示相关，永远给不出因果',
+      '预测，或某项干预措施的效果',
+      '艾哈迈达巴德以外的地方，或这四项测量以外的内容',
+    ],
+    scopeNote: '每个数字都由行政区数据表算出。模型只决定查什么、并把结果写成一句话，它不产生任何数字。',
+    egs: ['介绍一下 Odhav', 'Odhav 和 Paldi 比较', '哪些区最凉快'],
+  },
+};
+
+let LANG = 'en';
+try { LANG = localStorage.getItem('thermis-lang') === 'zh' ? 'zh' : 'en'; } catch (e) {}
+function t(key) { return (I18N[LANG] && I18N[LANG][key]) ?? I18N.en[key] ?? key; }
+
+function scopeHtml() {
+  const li = (xs) => xs.map((x) => `<li>${x}</li>`).join('');
+  const egs = t('egs').map((e) => `<button class="scope-eg" type="button" data-eg="${escapeHtml(e)}">${escapeHtml(e)}</button>`).join('');
+  return `
+    <div class="scope">
+      <div class="scope-head">${t('scopeCan')}</div>
+      <ul>${li(t('scopeCanList'))}</ul>
+      <div class="scope-head no">${t('scopeCant')}</div>
+      <ul>${li(t('scopeCantList'))}</ul>
+      <div class="interp-caveat" style="border-top:none;padding-top:10px">${t('scopeNote')}</div>
+      <div class="scope-egs">${egs}</div>
+    </div>`;
+}
+
+function applyLang() {
+  document.documentElement.lang = LANG === 'zh' ? 'zh-CN' : 'en';
+  document.querySelectorAll('[data-i18n]').forEach((el) => { el.textContent = t(el.dataset.i18n); });
+  const tog = document.getElementById('lang-toggle');
+  if (tog) tog.textContent = t('_toggle');
+  const input = document.getElementById('ai-ask-input');
+  if (input) input.placeholder = t('askPlaceholder');
+  const btn = document.getElementById('ai-ask-btn');
+  if (btn) btn.textContent = t('askBtn');
+  // Only the untouched panel is re-rendered; a result already on screen was
+  // produced in the other language and rewriting its labels would leave a
+  // half-translated card.
+  const body = document.getElementById('ai-panel-body');
+  if (body && body.dataset.state !== 'result') body.innerHTML = scopeHtml();
+}
+
+function initLang() {
+  const tog = document.getElementById('lang-toggle');
+  if (tog) tog.addEventListener('click', () => {
+    LANG = LANG === 'zh' ? 'en' : 'zh';
+    try { localStorage.setItem('thermis-lang', LANG); } catch (e) {}
+    applyLang();
+  });
+  document.addEventListener('click', (e) => {
+    const eg = e.target.closest('.scope-eg');
+    if (!eg) return;
+    const input = document.getElementById('ai-ask-input');
+    if (!input) return;
+    input.value = eg.dataset.eg;
+    document.getElementById('ai-ask-form').requestSubmit();
+  });
+  applyLang();
+}
+document.addEventListener('DOMContentLoaded', initLang);
 
 // ── FACT RENDERING BY INTENT ──────────────────────────────────
 // Every branch shows the computed figures before the prose. Raw tool output
@@ -1785,12 +1973,16 @@ async function fetchAIAnalysis(wardName, hviClass, props, layerKey) {
 // that the model did not produce these numbers, which matters when explaining
 // the design, but it is not what a reader came for.
 const METRIC_META = {
-  lst:        { label: 'Land surface temp', unit: '°C',   dp: 2 },
-  ndvi:       { label: 'NDVI',              unit: '',     dp: 3 },
-  population: { label: 'Population',        unit: '',     dp: 0 },
-  popDensity: { label: 'Density',           unit: '/km²', dp: 0 },
-  hvi:        { label: 'HVI',               unit: '',     dp: 3 },
+  lst:        { key: 'mLst',  unit: '°C',   dp: 2 },
+  ndvi:       { key: 'mNdvi', unit: '',     dp: 3 },
+  population: { key: 'mPop',  unit: '',     dp: 0 },
+  popDensity: { key: 'mDens', unit: '/km²', dp: 0 },
+  hvi:        { key: 'mHvi',  unit: '',     dp: 3 },
 };
+function metricLabel(metric) {
+  const m = METRIC_META[metric];
+  return m ? t(m.key) : metric;
+}
 
 function fmtValue(metric, v) {
   const m = METRIC_META[metric] || { unit: '', dp: 2 };
@@ -1799,21 +1991,20 @@ function fmtValue(metric, v) {
 }
 
 function rawBlock(facts) {
-  return `<details class="fact-raw"><summary>tool output</summary><pre>${escapeHtml(JSON.stringify(facts, null, 1))}</pre></details>`;
+  return `<details class="fact-raw"><summary>${t('toolOutput')}</summary><pre>${escapeHtml(JSON.stringify(facts, null, 1))}</pre></details>`;
 }
 
 function renderRankFacts(f) {
-  const meta = METRIC_META[f.metric] || { label: f.metric };
-  const dir = f.order === 'asc' ? 'lowest' : 'highest';
+  const dir = f.order === 'asc' ? t('lowest') : t('highest');
   const rows = f.wards.map(w =>
     `<tr><td>${escapeHtml(w.ward)}</td><td class="n">${fmtValue(f.metric, w.value)}</td><td class="r">${w.rank} / ${WARD_FACTS.city.wardCount}</td></tr>`
   ).join('');
   return `
     <div class="fact-block">
-      <div class="fact-block-label">Measured · ${escapeHtml(meta.label)} · ${dir}</div>
+      <div class="fact-block-label">${t('measuredPlain')} · ${escapeHtml(metricLabel(f.metric))} · ${dir}</div>
       <table class="fact-table">${rows}</table>
       <div class="fact-row" style="margin-top:6px;border-top:1px solid rgba(255,255,255,0.08);padding-top:6px">
-        <span class="k">City median</span><span class="v">${fmtValue(f.metric, f.cityMedian)}</span>
+        <span class="k">${t('cityMedian')}</span><span class="v">${fmtValue(f.metric, f.cityMedian)}</span>
       </div>
       ${rawBlock(f)}
     </div>`;
@@ -1822,17 +2013,16 @@ function renderRankFacts(f) {
 function renderCompareFacts(f) {
   const [a, b] = f.wards;
   const rows = Object.entries(f.diffs).map(([metric, d]) => {
-    const meta = METRIC_META[metric] || { label: metric };
     const mark = (name) => d.higher === name ? ' ▲' : '';
     return `<tr>
-      <td>${escapeHtml(meta.label)}</td>
+      <td>${escapeHtml(metricLabel(metric))}</td>
       <td class="n">${fmtValue(metric, d[a])}${mark(a)}</td>
       <td class="n">${fmtValue(metric, d[b])}${mark(b)}</td>
     </tr>`;
   }).join('');
   return `
     <div class="fact-block">
-      <div class="fact-block-label">Measured · side by side</div>
+      <div class="fact-block-label">${t('measuredSide')}</div>
       <table class="fact-table">
         <tr><td></td><td class="n" style="color:#c9a96e">${escapeHtml(a)}</td><td class="n" style="color:#c9a96e">${escapeHtml(b)}</td></tr>
         ${rows}
@@ -1843,16 +2033,15 @@ function renderCompareFacts(f) {
 
 function renderCityFacts(f) {
   const rows = Object.entries(f.metrics).map(([metric, m]) => {
-    const meta = METRIC_META[metric] || { label: metric };
     return `<tr>
-      <td>${escapeHtml(meta.label)}</td>
+      <td>${escapeHtml(metricLabel(metric))}</td>
       <td class="n">${fmtValue(metric, m.median)}</td>
       <td class="r">${fmtValue(metric, m.min)}–${fmtValue(metric, m.max)}</td>
     </tr>`;
   }).join('');
   return `
     <div class="fact-block">
-      <div class="fact-block-label">Measured · ${f.wardCount} wards · median (range)</div>
+      <div class="fact-block-label">${t('measuredPlain')} · ${f.wardCount} ${t('wardsUnit')} · ${t('medianRange')}</div>
       <table class="fact-table">${rows}</table>
       ${rawBlock(f)}
     </div>`;
@@ -1869,7 +2058,7 @@ function renderFactsFor(route, facts) {
     console.warn('fact rendering failed:', e);
   }
   // Never silently drop the figures — an unstyled dump beats showing only prose.
-  return `<div class="fact-block"><div class="fact-block-label">Measured</div>${rawBlock(facts)}</div>`;
+  return `<div class="fact-block"><div class="fact-block-label">${t('measuredPlain')}</div>${rawBlock(facts)}</div>`;
 }
 
 // ── FREE-FORM QUESTIONS ───────────────────────────────────────
@@ -1885,8 +2074,9 @@ function wireAskForm() {
     const q = input.value.trim();
     if (!q) return;
     btn.disabled = true;
+    panel.dataset.state = 'result';
     panel.innerHTML = `<div class="ai-qa"><div class="q">${escapeHtml(q)}</div>
-      <div class="ai-panel-text" style="color:var(--muted)">Working…</div></div>`;
+      <div class="ai-panel-text" style="color:var(--muted)">${t('working')}</div></div>`;
     try {
       const out = await askAnalyzer(q);
       let html = `<div class="ai-qa"><div class="q">${escapeHtml(q)}</div></div>`;
@@ -1894,14 +2084,14 @@ function wireAskForm() {
       if (out.answer) {
         html += renderInterp(out.answer, out.facts && out.facts.caveat ? { caveat: out.facts.caveat } : {});
       } else if (out.rejected) {
-        html += `<div class="interp-caveat">The generated answer failed the fact and wording checks and was discarded.</div>`;
+        html += `<div class="interp-caveat">${t('rejectedShort')}</div>`;
       } else if (out.note) {
         html += `<div class="ai-panel-text" style="color:var(--muted)">${escapeHtml(out.note)}</div>`;
       }
       panel.innerHTML = html;
     } catch (err) {
       panel.innerHTML = `<div class="ai-qa"><div class="q">${escapeHtml(q)}</div>
-        <div class="ai-panel-text" style="color:var(--muted)">Analyzer unreachable (${escapeHtml(err.message)}). Click a ward to read its measurements.</div></div>`;
+        <div class="ai-panel-text" style="color:var(--muted)">${t('unreachable')} (${escapeHtml(err.message)}).</div></div>`;
     } finally {
       btn.disabled = false;
       input.value = '';
@@ -1917,7 +2107,7 @@ function escapeHtml(x) {
 
 function resetWardPanel() {
   document.getElementById('ward-panel').innerHTML = `
-    <div class="section-label">Ward Information</div>
+    <div class="section-label" data-i18n="secWard">Ward Information</div>
     <div class="ward-empty">
       Click any ward on the map to view detailed heat vulnerability data.
       <span>← Select a ward</span>

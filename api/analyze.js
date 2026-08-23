@@ -57,8 +57,8 @@ ABSOLUTE RULES
    with", "伴随", "同时", "相关".
 3. Describe what is measured and how it ranks. Do not recommend policy unless
    FACTS contains an intervention field.
-4. Reply in the user's language. Three sentences at most. Plain prose, no lists,
-   no markdown headings.
+4. Reply in the language named by REPLY LANGUAGE. Three sentences at most.
+   Plain prose, no lists, no markdown headings.
 
 If FACTS contains "caveat", your last sentence must convey it.`
 
@@ -129,6 +129,10 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') return send(res, 405, { error: 'Method not allowed' })
 
   const question = String(req.body?.question ?? '').trim()
+  // The interface language, not a guess from the question: a Chinese reader
+  // clicking a ward sends an English prompt built by the app, and should still
+  // get Chinese prose back.
+  const lang = req.body?.lang === 'zh' ? 'zh' : 'en'
   if (!question) return send(res, 400, { error: 'question is required' })
   if (question.length > 500) return send(res, 400, { error: 'question is too long' })
 
@@ -166,7 +170,7 @@ export default async function handler(req, res) {
     for (let attempt = 0; attempt < 2 && !answer; attempt++) {
       const messages = [
         { role: 'system', content: WRITER_PROMPT },
-        { role: 'user', content: `QUESTION: ${question}\n\nFACTS:\n${JSON.stringify(facts, null, 1)}` },
+        { role: 'user', content: `REPLY LANGUAGE: ${lang === 'zh' ? 'Chinese (简体中文)' : 'English'}\n\nQUESTION: ${question}\n\nFACTS:\n${JSON.stringify(facts, null, 1)}` },
       ]
       if (validation) messages.push({ role: 'user', content: `Your previous reply was rejected: ${validation}. Rewrite it.` })
 
