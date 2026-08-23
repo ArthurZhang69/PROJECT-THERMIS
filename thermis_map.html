@@ -1004,8 +1004,8 @@
 // 替换成你的 Mapbox token
 mapboxgl.accessToken = 'pk.eyJ1IjoiYXJ0aHVyemhhbmciLCJhIjoiY21tNnVzcnozMG04MjJzcXVqazgxdzNxaCJ9.c8aCm6VVQO2bMe48ibH0Gg';
 
-// ← 在这里粘贴你的 Anthropic API key
-const ANTHROPIC_API_KEY = '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';
+// 注：模型密钥不再出现在客户端。它属于「绝不可公开」那一类，只存在于服务端
+// 环境变量中，由 /api 下的函数持有。见 THERMIS 升级方案阶段 0/1。
 
 // ← 在这里粘贴你的 Google Maps API key（用于 Street View 图片）
 // 需开启 Street View Static API：https://console.cloud.google.com/
@@ -1619,4 +1619,4 @@ function resetWardPanel() {
 }
 </script>
 </body>
-</html> 
+</html> 
