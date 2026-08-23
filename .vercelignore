@@ -1,0 +1,5 @@
+# Source rasters and tilesets — kept in git for provenance, never served.
+# The site loads only GEE_Exports/*.geojson and data/wards.json.
+Database/
+GEE_Exports/*.tif
+GEE_Exports/*.tif.aux.xml
