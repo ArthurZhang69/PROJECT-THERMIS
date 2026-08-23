@@ -206,3 +206,42 @@ test('a ward with no mapped public building says so rather than inventing one', 
   assert.match(centre.siting.note.en, /gap in the map, not proof/)
   assert.ok(centre.siting.note.zh.includes('地图的缺失'))
 })
+
+// Real OSM data arrived and changed nothing, because the thresholds guarding it
+// had been picked before any data existed — 5% green cover against a city whose
+// median is 0.15%. A field that cannot change an outcome is decoration.
+test('built-environment data changes outcomes rather than decorating them', async () => {
+  const { readFileSync } = await import('node:fs')
+  const { interventionsFor } = await import('../lib/interventions.mjs')
+  const { WARDS } = await import('../lib/facts.mjs')
+  let osm
+  try { osm = JSON.parse(readFileSync('data/osm.json', 'utf8')).wards } catch { return }
+  if (Object.values(osm).filter((w) => w.ok).length < 12) return
+
+  const fired = (useOsm) => WARDS.flatMap((w) =>
+    interventionsFor(w.ward, useOsm ? osm : null).matched.map((m) => `${w.ward}:${m.id}`))
+  const without = new Set(fired(false))
+  const with_ = new Set(fired(true))
+  const changed = [...without].filter((k) => !with_.has(k)).length
+    + [...with_].filter((k) => !without.has(k)).length
+  assert.ok(changed > 0, 'OSM data made no difference to any ward — the thresholds ignore it')
+})
+
+test('sparsely mapped fields never gate a rule', async () => {
+  const { readFileSync } = await import('node:fs')
+  const { interventionsFor, SPARSE_FIELDS } = await import('../lib/interventions.mjs')
+  const { WARDS } = await import('../lib/facts.mjs')
+  assert.ok(SPARSE_FIELDS.waterPoints && SPARSE_FIELDS.trees)
+  let osm
+  try { osm = JSON.parse(readFileSync('data/osm.json', 'utf8')).wards } catch { return }
+
+  // Zeroing the sparse fields must not change which rules fire: the map's gaps
+  // are not evidence about the ward.
+  const flattened = Object.fromEntries(Object.entries(osm).map(([k, v]) =>
+    [k, v.ok ? { ...v, trees: 0, waterPoints: 0 } : v]))
+  for (const w of WARDS.slice(0, 12)) {
+    const a = interventionsFor(w.ward, osm).matched.map((m) => m.id).join(',')
+    const b = interventionsFor(w.ward, flattened).matched.map((m) => m.id).join(',')
+    assert.equal(a, b, `${w.ward}: a sparse field changed the outcome`)
+  }
+})

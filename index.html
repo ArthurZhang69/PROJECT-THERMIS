@@ -2161,14 +2161,23 @@ function renderInterventionFacts(f) {
     return Math.abs(v) >= 1000 ? Math.round(v).toLocaleString() : v.toFixed(v < 1 ? 4 : 2);
   };
 
+  // A sparsely mapped count and the reason not to trust it belong in the same
+  // glance; separating them is how "0 trees" becomes a fact about the ward.
+  const sparseNote = (field) => {
+    const note = f.builtEnvironment?.sparse?.[field];
+    return note ? `<div class="measure-unknown" style="margin:-2px 0 6px">${L(note)}</div>` : '';
+  };
+
   const built = f.builtEnvironment ? `
     <div class="fact-block">
       <div class="fact-block-label">${t('builtEnv')} · OpenStreetMap</div>
       <div class="fact-row"><span class="k">${t('bBuildings')}</span><span class="v">${num(f.builtEnvironment.buildings)}</span></div>
       <div class="fact-row"><span class="k">${t('bTrees')}</span><span class="v">${num(f.builtEnvironment.trees)}</span></div>
+      ${sparseNote('trees')}
       <div class="fact-row"><span class="k">${t('bGreen')}</span><span class="v">${num(f.builtEnvironment.greenSharePct)}%</span></div>
       <div class="fact-row"><span class="k">${t('bAmenities')}</span><span class="v">${num(f.builtEnvironment.publicAmenities)}</span></div>
       <div class="fact-row"><span class="k">${t('bWater')}</span><span class="v">${num(f.builtEnvironment.waterPoints)}</span></div>
+      ${sparseNote('waterPoints')}
     </div>` : `
     <div class="fact-block">
       <div class="fact-block-label">${t('builtEnv')}</div>
