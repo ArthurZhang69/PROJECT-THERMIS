@@ -1053,9 +1053,16 @@ mapboxgl.accessToken = 'YOUR_MAPBOX_TOKEN_HERE';
 // 注：模型密钥不再出现在客户端。它属于「绝不可公开」那一类，只存在于服务端
 // 环境变量中，由 /api 下的函数持有。见 THERMIS 升级方案阶段 0/1。
 
-// ← 在这里粘贴你的 Google Maps API key（用于 Street View 图片）
-// 需开启 Street View Static API：https://console.cloud.google.com/
-const GOOGLE_MAPS_API_KEY = 'YOUR_GOOGLE_MAPS_KEY_HERE';
+// Street View key, fetched from the server rather than committed. It still
+// reaches the browser — a Static Street View request carries its key in the
+// image URL — but keeping it out of the repository avoids secret-scanner
+// alerts on an already referrer-restricted key. Street View is decorative:
+// if this never arrives, the panel simply omits it.
+let GOOGLE_MAPS_API_KEY = '';
+fetch('/api/config')
+  .then((r) => r.json())
+  .then((c) => { GOOGLE_MAPS_API_KEY = c.googleMapsKey || ''; })
+  .catch(() => {});
 
 // GeoJSON 文件路径 — 替换成你的实际文件路径或 URL
 const GEOJSON = {

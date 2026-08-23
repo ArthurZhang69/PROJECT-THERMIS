@@ -3,6 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "build": "node scripts/inject-tokens.mjs",
     "build:data": "node scripts/build-wards.mjs",
     "check:static": "node scripts/check-static-analysis.mjs",
     "test": "node --test tests/*.test.mjs"
