@@ -835,6 +835,47 @@
     margin-top: 2px;
     letter-spacing: 0.04em;
   }
+
+  /* ── FACTS / INTERPRETATION SPLIT ──
+     Measurements and prose are separated on purpose. Everything in .fact-block
+     is arithmetic over the ward table; everything in .interp-block was written
+     by a model from those same numbers. A reader must be able to tell which is
+     which without being told. */
+  .fact-block {
+    border: 1px solid rgba(201,169,110,0.28);
+    border-radius: 6px; padding: 10px 12px; margin-bottom: 10px;
+    background: rgba(201,169,110,0.05);
+  }
+  .fact-block-label {
+    font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: #c9a96e; margin-bottom: 8px;
+  }
+  .fact-row { display: flex; justify-content: space-between; gap: 10px; padding: 3px 0; font-size: 11px; }
+  .fact-row .k { color: var(--muted); }
+  .fact-row .v { font-variant-numeric: tabular-nums; text-align: right; }
+  .fact-row .rank { color: var(--muted); font-size: 10px; margin-left: 5px; }
+  .interp-block { border-left: 2px solid rgba(255,255,255,0.14); padding-left: 10px; margin-bottom: 10px; }
+  .interp-block-label {
+    font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 6px;
+  }
+  .interp-caveat {
+    font-size: 10px; line-height: 1.5; color: var(--muted);
+    margin-top: 8px; padding-top: 7px; border-top: 1px dashed rgba(255,255,255,0.12);
+  }
+  .ai-ask { border-top: 1px solid rgba(255,255,255,0.09); padding: 10px 14px; display: flex; gap: 6px; }
+  .ai-ask input {
+    flex: 1; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.14);
+    border-radius: 5px; padding: 7px 9px; color: inherit; font: inherit; font-size: 11px; outline: none;
+  }
+  .ai-ask input:focus { border-color: rgba(201,169,110,0.55); }
+  .ai-ask button {
+    background: rgba(201,169,110,0.16); border: 1px solid rgba(201,169,110,0.4);
+    color: #c9a96e; border-radius: 5px; padding: 0 11px; font-size: 11px; cursor: pointer;
+  }
+  .ai-ask button:disabled { opacity: 0.45; cursor: default; }
+  .ai-qa { font-size: 11px; margin-bottom: 12px; }
+  .ai-qa .q { color: #c9a96e; margin-bottom: 6px; }
 </style>
 </head>
 <body>
@@ -991,10 +1032,15 @@
     </div>
     <div class="ai-panel-body" id="ai-panel-body">
       <div class="ai-panel-empty">
-        Select a ward on the map to generate an AI-powered heat risk analysis.
+        Click a ward for its measurements, or ask a question below.
         <span>← Click any ward</span>
       </div>
     </div>
+    <form class="ai-ask" id="ai-ask-form" autocomplete="off">
+      <input id="ai-ask-input" type="text" maxlength="200"
+             placeholder="Why is Odhav hotter than Paldi?">
+      <button type="submit" id="ai-ask-btn">Ask</button>
+    </form>
   </div>
 
 </div>
@@ -1077,7 +1123,21 @@ let hoveredId    = null;
 let hoveredLayer = null;
 
 // ── LOAD ALL GEOJSON ─────────────────────────────────────────
+// The same table the server tools read. Loading it here lets the panel show
+// measurements immediately, with no model call and no network dependency —
+// the figures are on screen before any prose is written about them.
+let WARD_FACTS = null;
+async function loadWardFacts() {
+  try {
+    const res = await fetch('data/wards.json');
+    WARD_FACTS = await res.json();
+  } catch (e) {
+    console.warn('ward fact table unavailable:', e);
+  }
+}
+
 async function loadAllData() {
+  await loadWardFacts();
   for (const [key, path] of Object.entries(GEOJSON)) {
     try {
       const res = await fetch(path);
@@ -1589,24 +1649,164 @@ const WARD_ANALYSIS = {
   "Nikol": "Nikol's **HVI Class 3** with **LST 49.9°C** and **NDVI 0.168** reveals meaningful heat risk for **269,599 residents** in a rapidly growing zone. HAP should deploy **community cooling infrastructure** and enforce green cover requirements in new residential developments."
 };
 
+/**
+ * Render the measurements first, then ask the model to interpret them.
+ *
+ * Order matters. The figures come from the ward table and are on screen
+ * whether or not the model answers; the prose is an interpretation layered on
+ * top, visually separated, and clearly attributed. When the analyzer is
+ * unreachable the panel loses its commentary and keeps its facts.
+ */
+function lookupFacts(wardName) {
+  if (!WARD_FACTS || !wardName) return null;
+  const norm = (x) => String(x).toLowerCase().replace(/[^a-z0-9]/g, '');
+  const key = norm(wardName);
+  return WARD_FACTS.wards.find(w => norm(w.ward) === key)
+      || WARD_FACTS.wards.find(w => norm(w.ward).includes(key) || key.includes(norm(w.ward)))
+      || null;
+}
+
+function factRow(label, value, rank) {
+  const r = rank ? `<span class="rank">${rank} / ${WARD_FACTS.city.wardCount}</span>` : '';
+  return `<div class="fact-row"><span class="k">${label}</span><span class="v">${value}${r}</span></div>`;
+}
+
+function renderFactBlock(w) {
+  if (!w) return '';
+  const c = WARD_FACTS.city;
+  const signed = (v, d) => (v >= 0 ? '+' : '') + v.toFixed(d);
+  return `
+    <div class="fact-block">
+      <div class="fact-block-label">Measured · Sentinel-2 / MODIS</div>
+      ${factRow('Land surface temp', `${w.lst.toFixed(2)}°C`, w.lstRank)}
+      ${factRow('vs city median', `${signed(w.lstVsMedian, 2)}°C`)}
+      ${factRow('NDVI', w.ndvi.toFixed(3), w.ndviRank)}
+      ${factRow('Population', w.population.toLocaleString(), w.populationRank)}
+      ${factRow('Density', `${w.popDensity.toLocaleString()}/km²`, w.popDensityRank)}
+      ${factRow('HVI', `${w.hvi.toFixed(3)} (class ${w.hviClass})`, w.hviRank)}
+    </div>`;
+}
+
+function renderInterp(text, { caveat, source } = {}) {
+  const html = String(text).trim().replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  return `
+    <div class="interp-block">
+      <div class="interp-block-label">Interpretation${source ? ' · ' + source : ''}</div>
+      <div class="ai-panel-text">${html}</div>
+      <div class="interp-caveat">${caveat || 'Cross-sectional remote sensing shows association, not cause. Figures above are measured; this paragraph is written from them.'}</div>
+    </div>`;
+}
+
+async function askAnalyzer(question) {
+  const res = await fetch('/api/analyze', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ question }),
+  });
+  if (!res.ok) {
+    const reason = await res.json().then(b => b && b.reason).catch(() => null);
+    throw new Error(reason || `analyzer ${res.status}`);
+  }
+  return res.json();
+}
+
 async function fetchAIAnalysis(wardName, hviClass, props, layerKey) {
   const bodyEl   = document.getElementById('ai-analysis-body');
   const statusEl = document.getElementById('ai-status') || document.createElement('span');
   if (!bodyEl) return;
 
-  // Look up pre-generated analysis
-  const analysis = WARD_ANALYSIS[wardName] || WARD_ANALYSIS[Object.keys(WARD_ANALYSIS).find(k => wardName && wardName.toLowerCase().includes(k.toLowerCase()))];
+  const w = lookupFacts(wardName);
+  const factHtml = renderFactBlock(w);
 
-  if (analysis) {
-    statusEl.textContent = 'Powered by Claude';
-    const html = analysis.trim().replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-    bodyEl.innerHTML = `<div class="ai-panel-text">${html}</div>`;
+  // Measurements render straight away; nothing below can change them.
+  if (factHtml) {
+    bodyEl.innerHTML = factHtml + '<div class="ai-panel-text" style="color:var(--muted)">Interpreting…</div>';
+  }
+
+  try {
+    const out = await askAnalyzer(`Describe ${wardName} and how it compares with the rest of Ahmedabad.`);
+    if (out.answer) {
+      statusEl.textContent = 'Live analysis';
+      bodyEl.innerHTML = factHtml + renderInterp(out.answer);
+      return;
+    }
+    // The writer produced something the checks rejected. Say so rather than
+    // printing it — a rejected sentence is not a lesser answer, it is a wrong one.
+    if (out.rejected) {
+      statusEl.textContent = 'Interpretation withheld';
+      bodyEl.innerHTML = factHtml +
+        `<div class="interp-caveat">A generated interpretation failed the fact and wording checks and was discarded. The measurements above are unaffected.</div>`;
+      return;
+    }
+  } catch (e) {
+    console.warn('analyzer unavailable:', e.message);
+  }
+
+  // Offline floor: the reviewed paragraphs generated ahead of time. Fixed wards,
+  // fixed content — pre-generating and checking them is cheaper and steadier
+  // than a live call, so this is a designed layer, not leftover code.
+  const staticText = WARD_ANALYSIS[wardName]
+    || WARD_ANALYSIS[Object.keys(WARD_ANALYSIS).find(k => wardName && wardName.toLowerCase().includes(k.toLowerCase()))];
+  if (staticText) {
+    statusEl.textContent = 'Offline summary';
+    bodyEl.innerHTML = factHtml + renderInterp(staticText, {
+      source: 'pre-generated',
+      caveat: 'Live analysis is unavailable, so this is a reviewed summary prepared in advance. Measurements above are read from the dataset.',
+    });
     return;
   }
 
-  // Fallback message if ward not found
   statusEl.textContent = '';
-  bodyEl.innerHTML = `<div class="ai-panel-text" style="color:var(--muted)">No analysis available for this ward.</div>`;
+  bodyEl.innerHTML = factHtml ||
+    `<div class="ai-panel-text" style="color:var(--muted)">No data for this ward.</div>`;
+}
+
+// ── FREE-FORM QUESTIONS ───────────────────────────────────────
+function wireAskForm() {
+  const form = document.getElementById('ai-ask-form');
+  const input = document.getElementById('ai-ask-input');
+  const btn = document.getElementById('ai-ask-btn');
+  const panel = document.getElementById('ai-panel-body');
+  if (!form) return;
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const q = input.value.trim();
+    if (!q) return;
+    btn.disabled = true;
+    panel.innerHTML = `<div class="ai-qa"><div class="q">${escapeHtml(q)}</div>
+      <div class="ai-panel-text" style="color:var(--muted)">Working…</div></div>`;
+    try {
+      const out = await askAnalyzer(q);
+      let html = `<div class="ai-qa"><div class="q">${escapeHtml(q)}</div></div>`;
+      if (out.route && out.route.intent === 'ward') {
+        html += renderFactBlock(lookupFacts(out.route.ward));
+      } else if (out.facts) {
+        html += `<div class="fact-block"><div class="fact-block-label">Computed</div>
+          <pre style="font-size:10px;white-space:pre-wrap;margin:0">${escapeHtml(JSON.stringify(out.facts, null, 1))}</pre></div>`;
+      }
+      if (out.answer) {
+        html += renderInterp(out.answer, out.facts && out.facts.caveat ? { caveat: out.facts.caveat } : {});
+      } else if (out.rejected) {
+        html += `<div class="interp-caveat">The generated answer failed the fact and wording checks and was discarded.</div>`;
+      } else if (out.note) {
+        html += `<div class="ai-panel-text" style="color:var(--muted)">${escapeHtml(out.note)}</div>`;
+      }
+      panel.innerHTML = html;
+    } catch (err) {
+      panel.innerHTML = `<div class="ai-qa"><div class="q">${escapeHtml(q)}</div>
+        <div class="ai-panel-text" style="color:var(--muted)">Analyzer unreachable (${escapeHtml(err.message)}). Click a ward to read its measurements.</div></div>`;
+    } finally {
+      btn.disabled = false;
+      input.value = '';
+    }
+  });
+}
+document.addEventListener('DOMContentLoaded', wireAskForm);
+
+function escapeHtml(x) {
+  return String(x).replace(/[&<>"']/g, (c) =>
+    ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 }
 
 function resetWardPanel() {
