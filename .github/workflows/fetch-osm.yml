@@ -1,0 +1,37 @@
+name: Fetch OSM built-environment data
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Extract per-ward counts from Overpass
+        run: node scripts/fetch-osm.mjs
+
+      - name: Commit data/osm.json
+        run: |
+          if [ ! -f data/osm.json ]; then
+            echo "No data/osm.json produced - see the step above for why."
+            exit 1
+          fi
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/osm.json
+          if git diff --staged --quiet; then
+            echo "No change to commit."
+          else
+            git commit -m "data: OSM built-environment counts per ward"
+            git push
+          fi
