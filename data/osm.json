@@ -4,243 +4,2254 @@
  "wards": {
   "1302501": {
    "ward": "Gota",
-   "ok": false,
-   "error": "Overpass 406: <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">\n<html><head>\n<t"
+   "ok": true,
+   "buildings": 4301,
+   "trees": 6,
+   "amenities": 17,
+   "waterPoints": 0,
+   "greenAreaKm2": 1.154,
+   "publicBuildings": [
+    {
+     "name": "RC TECHNICAL INSTITUTE",
+     "kind": "college"
+    },
+    {
+     "name": "vizcare hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Samarpan General Hospital, Ahmedabad",
+     "kind": "hospital"
+    },
+    {
+     "name": "Marengo CIMS Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Gmers Medical College Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "J J Hospital, Ahmedabad",
+     "kind": "hospital"
+    },
+    {
+     "name": "Motherhood Womens and Child Care Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "HCG Cancer Centre",
+     "kind": "hospital"
+    },
+    {
+     "name": "Lions Karnavati Shantaben Vishnubhai Patel Eye Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "NIRMA University",
+     "kind": "college"
+    },
+    {
+     "name": "Lions Karnavati Shantaben Vishnubhai Patel Eye Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Dr. Parth Amin (ENT Surgeon) Shaleen Hospital",
+     "kind": "hospital"
+    }
+   ]
   },
   "1302502": {
    "ward": "Chandlodiya",
-   "ok": false,
-   "error": "Overpass 406: <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">\n<html><head>\n<t"
+   "ok": true,
+   "buildings": 741,
+   "trees": 29,
+   "amenities": 14,
+   "waterPoints": 0,
+   "greenAreaKm2": 0.323,
+   "publicBuildings": [
+    {
+     "name": "S G Hospital Chandlodiya",
+     "kind": "hospital"
+    },
+    {
+     "name": "Samata Hospital Pvt.Ltd",
+     "kind": "hospital"
+    },
+    {
+     "name": "Shri Rang Hospitaland Research Centre",
+     "kind": "hospital"
+    },
+    {
+     "name": "Shri Yogeshwar General Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Mahalaxmi Maternity Nursing Home and Sonography Center",
+     "kind": "clinic"
+    },
+    {
+     "name": "Hridaan Hospital & Pharmacy",
+     "kind": "hospital"
+    },
+    {
+     "name": "Satyam Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "H3 World School",
+     "kind": "school"
+    },
+    {
+     "name": "Nirma Vidhya Vihar",
+     "kind": "school"
+    },
+    {
+     "name": "NIRMA University",
+     "kind": "college"
+    }
+   ]
   },
   "1302503": {
    "ward": "Chandkheda",
-   "ok": false,
-   "error": "fetch failed"
+   "ok": true,
+   "buildings": 2365,
+   "trees": 73,
+   "amenities": 36,
+   "waterPoints": 0,
+   "greenAreaKm2": 0.072,
+   "publicBuildings": [
+    {
+     "name": "Satyam Children Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Kalyani Nursing Home and Sonography Clinic",
+     "kind": "clinic"
+    },
+    {
+     "name": "Shilp E.N.T Clinic and Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Netra Jyoti Eye and Ent Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Utkarsh Hospital, Ahmedabad",
+     "kind": "hospital"
+    },
+    {
+     "name": "Pushpa Children Hospital and Neonatal Care",
+     "kind": "hospital"
+    },
+    {
+     "name": "Amrut Arogyadham Medical Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Shree Sai Children Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Shreyas Orthopedic Hospital, Ahmedabad",
+     "kind": "hospital"
+    },
+    {
+     "name": "Mahavir Clinic & Nursing Home",
+     "kind": "clinic"
+    },
+    {
+     "name": "Navjivan Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Pushp Hospital and Maternity Home",
+     "kind": "hospital"
+    }
+   ]
   },
   "1302504": {
    "ward": "Sabarmati",
-   "ok": false,
-   "error": "fetch failed"
+   "ok": true,
+   "buildings": 4291,
+   "trees": 0,
+   "amenities": 36,
+   "waterPoints": 1,
+   "greenAreaKm2": 0.1,
+   "publicBuildings": [
+    {
+     "name": "Geeta Maternity Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Sabarmati Development Society Sanchalit Sheth Shri Pukhraj Raichand General Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Vasudha Eye Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Om Pediatric and Neonatal Criticare Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Panchshil Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Khara Fracture and Orthopaedic Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Sivmm Kidney Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Sharda Eye Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Dhruvi ENT Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Neelkamal Hospital Pvt Ltd (Pooja Hospital)",
+     "kind": "hospital"
+    },
+    {
+     "name": "Sanskar Heart Care And Medical Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Divya Jyot Eye Hospital",
+     "kind": "hospital"
+    }
+   ]
   },
   "1302505": {
    "ward": "Ranip",
-   "ok": false,
-   "error": "fetch failed"
+   "ok": true,
+   "buildings": 1739,
+   "trees": 0,
+   "amenities": 7,
+   "waterPoints": 0,
+   "greenAreaKm2": 0.003,
+   "publicBuildings": [
+    {
+     "name": "Aalisha Clinic",
+     "kind": "hospital"
+    },
+    {
+     "name": "BalMukund Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Harsiddh Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Tejal Eye Hospital",
+     "kind": "hospital"
+    }
+   ]
   },
   "1302506": {
    "ward": "New Wadaj",
-   "ok": false,
-   "error": "fetch failed"
+   "ok": true,
+   "buildings": 1782,
+   "trees": 0,
+   "amenities": 30,
+   "waterPoints": 0,
+   "greenAreaKm2": 0.01,
+   "publicBuildings": [
+    {
+     "name": "Chandrakant Baxi Muncipal Library",
+     "kind": "library"
+    },
+    {
+     "name": "Poojan Children Hospital And Neonatal Care Centre",
+     "kind": "hospital"
+    },
+    {
+     "name": "Amijeet Maternity Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Maruti Orthopedic Hospital, Nava Vadaj",
+     "kind": "hospital"
+    },
+    {
+     "name": "Jatan Children Hospital, Ahmedabad",
+     "kind": "hospital"
+    },
+    {
+     "name": "Pulse Iccu and Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Manshi Multispeciality Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Vardan Eye Hospital, Ahmedabad",
+     "kind": "hospital"
+    },
+    {
+     "name": "Vadaj Orthopaedic Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Trisha Trauma Centre and Icu",
+     "kind": "hospital"
+    },
+    {
+     "name": "Krishna Hospital and ICCU",
+     "kind": "hospital"
+    },
+    {
+     "name": "Dr.Anil V.Patel Eye Hospital",
+     "kind": "hospital"
+    }
+   ]
   },
   "1302507": {
    "ward": "Ghatlodia",
-   "ok": false,
-   "error": "fetch failed"
+   "ok": true,
+   "buildings": 328,
+   "trees": 0,
+   "amenities": 28,
+   "waterPoints": 0,
+   "greenAreaKm2": 0.006,
+   "publicBuildings": [
+    {
+     "name": "Karmachari Shiksan Tirth",
+     "kind": "school"
+    },
+    {
+     "name": "M B Patel Gyanjyot High School",
+     "kind": "school"
+    },
+    {
+     "name": "Gyanda Girls High School",
+     "kind": "school"
+    },
+    {
+     "name": "Nutan Vidya Vihar",
+     "kind": "school"
+    },
+    {
+     "name": "Amrita Vidyalayam",
+     "kind": "school"
+    },
+    {
+     "name": "Dr.Atul Shah Eye Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Gurukrupa Hospital, Ahmedabad",
+     "kind": "hospital"
+    },
+    {
+     "name": "Vallabh Surgical Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Aneri Children Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Shree Mahavir Mutlispeciality Hospital and Icu",
+     "kind": "hospital"
+    },
+    {
+     "name": "Aditya Multi-Speciality Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Sainath Orhtopaedic Hospital",
+     "kind": "hospital"
+    }
+   ]
   },
   "1302508": {
    "ward": "Thaltej",
-   "ok": false,
-   "error": "Overpass 406: <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">\n<html><head>\n<t"
+   "ok": true,
+   "buildings": 7312,
+   "trees": 0,
+   "amenities": 43,
+   "waterPoints": 0,
+   "greenAreaKm2": 2.22,
+   "publicBuildings": [
+    {
+     "name": "Bagban Party Plot",
+     "kind": "events_venue"
+    },
+    {
+     "name": "Sterling Hospital Div. Of Addlife Medical Institute Pvt. Ltd.",
+     "kind": "hospital"
+    },
+    {
+     "name": "Shangrila Bunglows",
+     "kind": "community_centre"
+    },
+    {
+     "name": "Ramanand gurukul swastik hall",
+     "kind": "community_centre"
+    },
+    {
+     "name": "little flower",
+     "kind": "hospital"
+    },
+    {
+     "name": "Satva Vikas School",
+     "kind": "school"
+    },
+    {
+     "name": "Nandan Maternity Home",
+     "kind": "hospital"
+    },
+    {
+     "name": "Chandrabhan Hospital and Gynac Institute",
+     "kind": "hospital"
+    },
+    {
+     "name": "Samarpan Maternity And Urosurgical Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Mehta Hospital, Siddhachal",
+     "kind": "hospital"
+    },
+    {
+     "name": "Shreeji Orthopaedic And Ent Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Udit Hospital Multi Speciality",
+     "kind": "hospital"
+    }
+   ]
   },
   "1302509": {
    "ward": "Naranpura",
-   "ok": false,
-   "error": "fetch failed"
+   "ok": true,
+   "buildings": 1206,
+   "trees": 0,
+   "amenities": 32,
+   "waterPoints": 0,
+   "greenAreaKm2": 0.047,
+   "publicBuildings": [
+    {
+     "name": "St. Xavier's High School, Loyola Hall",
+     "kind": "school"
+    },
+    {
+     "name": "Navrang School",
+     "kind": "school"
+    },
+    {
+     "name": "Cutis Cosmetic Plastic Surgery Centre",
+     "kind": "hospital"
+    },
+    {
+     "name": "Minal Infertility Clinic and Nursing Home",
+     "kind": "hospital"
+    },
+    {
+     "name": "Rhythm Cardio Pulmonory Care Centre and Medical Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Hina Maternity Nursing Home",
+     "kind": "clinic"
+    },
+    {
+     "name": "Dr. Kaushik Vaidhya Medical Nursing Home",
+     "kind": "clinic"
+    },
+    {
+     "name": "Umiya Surgical Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Nidhi Eye Hospital, Ahmedabad",
+     "kind": "hospital"
+    },
+    {
+     "name": "Modi Eye Care",
+     "kind": "clinic"
+    },
+    {
+     "name": "Usha - Deep Hospital and Nursing Home",
+     "kind": "hospital"
+    },
+    {
+     "name": "Devi Hospital",
+     "kind": "hospital"
+    }
+   ]
   },
   "1302510": {
    "ward": "S. P. Stadium",
-   "ok": false,
-   "error": "fetch failed"
+   "ok": true,
+   "buildings": 2283,
+   "trees": 0,
+   "amenities": 27,
+   "waterPoints": 0,
+   "greenAreaKm2": 0.074,
+   "publicBuildings": [
+    {
+     "name": "Shivam X-ray & Sonography clinic",
+     "kind": "hospital"
+    },
+    {
+     "name": "Navkar Surgical Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Navjyot Eye Hospital, Ahmedabad",
+     "kind": "hospital"
+    },
+    {
+     "name": "Chetna Maternity Home",
+     "kind": "hospital"
+    },
+    {
+     "name": "Welcare Women's Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Aalok Hospital, Ahmedabad",
+     "kind": "hospital"
+    },
+    {
+     "name": "Dr. Manish Ravals Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Harsh Neurosurgical Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Bodycare Orthopaedic and Trauma Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Devasya Kidney and Multi speciality Hospital, Ahmedabad",
+     "kind": "hospital"
+    },
+    {
+     "name": "Kheteswar Medical Educational and Research Centre Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Shah Hospital - Vadaj",
+     "kind": "hospital"
+    }
+   ]
   },
   "1302511": {
    "ward": "Sardar Nagar",
-   "ok": false,
-   "error": "Overpass 406: <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">\n<html><head>\n<t"
+   "ok": true,
+   "buildings": 495,
+   "trees": 0,
+   "amenities": 10,
+   "waterPoints": 0,
+   "greenAreaKm2": 0.32,
+   "publicBuildings": [
+    {
+     "name": "Jeevandeep Hospital, Sardanagar",
+     "kind": "hospital"
+    },
+    {
+     "name": "Kothari Hospital, Ahmedabad",
+     "kind": "hospital"
+    },
+    {
+     "name": "Shivam Medical Hospital, Sardar Nagar",
+     "kind": "hospital"
+    },
+    {
+     "name": "Gujarat Research And Medical Institute Hospital",
+     "kind": "hospital"
+    }
+   ]
   },
   "1302512": {
    "ward": "Naroda",
-   "ok": false,
-   "error": "Overpass 406: <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">\n<html><head>\n<t"
+   "ok": true,
+   "buildings": 247,
+   "trees": 0,
+   "amenities": 8,
+   "waterPoints": 0,
+   "greenAreaKm2": 0.001,
+   "publicBuildings": [
+    {
+     "name": "Patel.K.K.Muni Library",
+     "kind": "library"
+    },
+    {
+     "name": "Gitanjali Children Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Shivam Surgical Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Parvati Jadav Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Poojan Maternity and Infertility Clinic",
+     "kind": "clinic"
+    },
+    {
+     "name": "Soni Nursing Home",
+     "kind": "clinic"
+    },
+    {
+     "name": "Rudraksh Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Vikas Medical and Heart Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Shivam Surgical Hospital",
+     "kind": "hospital"
+    }
+   ]
   },
   "1302513": {
    "ward": "Saijpur Bogha",
-   "ok": false,
-   "error": "Overpass 406: <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">\n<html><head>\n<t"
+   "ok": true,
+   "buildings": 16,
+   "trees": 0,
+   "amenities": 15,
+   "waterPoints": 0,
+   "greenAreaKm2": 0,
+   "publicBuildings": [
+    {
+     "name": "Prathna Surgical And Medical Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Suvan Eye Care",
+     "kind": "hospital"
+    },
+    {
+     "name": "Anand Hospital and Multispeciality",
+     "kind": "hospital"
+    },
+    {
+     "name": "Anand Surgical Hospital Ltd.",
+     "kind": "hospital"
+    },
+    {
+     "name": "Aadya Eye and Ent Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Rukshmani Surgical Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Trupti Hospital, Saijpur",
+     "kind": "hospital"
+    },
+    {
+     "name": "Karnavati Super Speciality Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Saraswati Eye Hospital, Ahmedabad",
+     "kind": "hospital"
+    },
+    {
+     "name": "Siddhi Hospital, Ahmedabad",
+     "kind": "hospital"
+    },
+    {
+     "name": "Shivam Heart and Medical Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Mahadev Eye Care",
+     "kind": "clinic"
+    }
+   ]
   },
   "1302514": {
    "ward": "Kuber Nagar",
-   "ok": false,
-   "error": "Overpass 406: <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">\n<html><head>\n<t"
+   "ok": true,
+   "buildings": 7,
+   "trees": 0,
+   "amenities": 1,
+   "waterPoints": 0,
+   "greenAreaKm2": 0.003,
+   "publicBuildings": [
+    {
+     "name": "Gayatri X Ray Clinic and Health Care",
+     "kind": "clinic"
+    }
+   ]
   },
   "1302515": {
    "ward": "Asarwa",
-   "ok": false,
-   "error": "fetch failed"
+   "ok": true,
+   "buildings": 77,
+   "trees": 0,
+   "amenities": 15,
+   "waterPoints": 0,
+   "greenAreaKm2": 0.005,
+   "publicBuildings": [
+    {
+     "name": "Pooja Hospital, Ahmedabad",
+     "kind": "hospital"
+    },
+    {
+     "name": "Sharda Clinic and Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Rameshwar Multi Speciality Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Kamal Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Gcs Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Sonal Maternity Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Ashirwad Maternity and Nursing Home",
+     "kind": "hospital"
+    },
+    {
+     "name": "GCS Hospital",
+     "kind": "hospital"
+    }
+   ]
   },
   "1302516": {
    "ward": "Shahibag",
-   "ok": false,
-   "error": "fetch failed"
+   "ok": true,
+   "buildings": 359,
+   "trees": 0,
+   "amenities": 47,
+   "waterPoints": 0,
+   "greenAreaKm2": 0.019,
+   "publicBuildings": [
+    {
+     "name": "Kidny hospital , asarwa",
+     "kind": "hospital"
+    },
+    {
+     "name": "Gujarat Institute Of Nursing Education And Research , Asarwa ,Ahemedabad",
+     "kind": "hospital"
+    },
+    {
+     "name": "Government Dental College and Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Government Dental College ,Ahemedabad",
+     "kind": "college"
+    },
+    {
+     "name": "BJ Medical College ,Haripura -Asarwa",
+     "kind": "college"
+    },
+    {
+     "name": "Shree Bharti Vallabh Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Raj Nursing Home, Ahmedabad",
+     "kind": "clinic"
+    },
+    {
+     "name": "Akshardeep Orthopaedic Hospital, Shahibaug",
+     "kind": "hospital"
+    },
+    {
+     "name": "Jivansudha Heart and Medical Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Anand Multi Speciality Hospital, Ahmedabad",
+     "kind": "hospital"
+    },
+    {
+     "name": "Chandramani Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Jeel Children Hospital And Neonatal and Vaccination Center",
+     "kind": "hospital"
+    }
+   ]
   },
   "1302517": {
    "ward": "Shahpur",
-   "ok": false,
-   "error": "fetch failed"
+   "ok": true,
+   "buildings": 208,
+   "trees": 0,
+   "amenities": 21,
+   "waterPoints": 0,
+   "greenAreaKm2": 0.064,
+   "publicBuildings": [
+    {
+     "name": "Jayotindra Dave Muncipal Library",
+     "kind": "library"
+    },
+    {
+     "name": "Shree Bharti Vallabh Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Jeevandeep Hospital, Shashibaug",
+     "kind": "hospital"
+    },
+    {
+     "name": "Baps Yogiji Maharaj Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Adwait Ent Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Krishna Maternity and Nursing Home",
+     "kind": "hospital"
+    },
+    {
+     "name": "ESIC Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Maheshwari Children Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Sagar Multi Speciality Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Krishna Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Gujarat State Police Welfare Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Clear Vision Eye Hospital",
+     "kind": "hospital"
+    }
+   ]
   },
   "1302518": {
    "ward": "Navrangpura",
-   "ok": false,
-   "error": "fetch failed"
+   "ok": true,
+   "buildings": 4313,
+   "trees": 82,
+   "amenities": 104,
+   "waterPoints": 0,
+   "greenAreaKm2": 0.311,
+   "publicBuildings": [
+    {
+     "name": "Mt. Carmel School",
+     "kind": "school"
+    },
+    {
+     "name": "A. G. Teachers High School",
+     "kind": "school"
+    },
+    {
+     "name": "St. Xavier's College",
+     "kind": "college"
+    },
+    {
+     "name": "SLIMS - Som Lalit Institute of Management Studies",
+     "kind": "college"
+    },
+    {
+     "name": "Sahajanand College",
+     "kind": "school"
+    },
+    {
+     "name": "British Library, Ahmedabad",
+     "kind": "library"
+    },
+    {
+     "name": "Vikram A. Sarabhai Community Science Centre",
+     "kind": "community_centre"
+    },
+    {
+     "name": "saviour annexe hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Planet Women Fertility and Counseling",
+     "kind": "hospital"
+    },
+    {
+     "name": "Jagmohan Hospital, Ahmedabad",
+     "kind": "hospital"
+    },
+    {
+     "name": "Saumya Children Hospital and Neonatal Care Center",
+     "kind": "hospital"
+    },
+    {
+     "name": "Life Care Institute Of Medical Sciences Research Hospital",
+     "kind": "hospital"
+    }
+   ]
   },
   "1302519": {
    "ward": "Bodakdev",
-   "ok": false,
-   "error": "fetch failed"
+   "ok": true,
+   "buildings": 5724,
+   "trees": 37,
+   "amenities": 59,
+   "waterPoints": 0,
+   "greenAreaKm2": 0.596,
+   "publicBuildings": [
+    {
+     "name": "Kendriya Vidyalaya SAC",
+     "kind": "school"
+    },
+    {
+     "name": "Sunflower Womens Endo Infertility and Hospital Pvt. Ltd.",
+     "kind": "hospital"
+    },
+    {
+     "name": "little flower",
+     "kind": "hospital"
+    },
+    {
+     "name": "May Flower Womens Hospital Pvt. Ltd.",
+     "kind": "hospital"
+    },
+    {
+     "name": "sunflower infertility clinic",
+     "kind": "clinic"
+    },
+    {
+     "name": "SN Collage",
+     "kind": "college"
+    },
+    {
+     "name": "SN School",
+     "kind": "school"
+    },
+    {
+     "name": "Raghunath Party Plot",
+     "kind": "community_centre"
+    },
+    {
+     "name": "Excel Eye Care",
+     "kind": "hospital"
+    },
+    {
+     "name": "Kalrav Children Hospital, Ahmedabad",
+     "kind": "hospital"
+    },
+    {
+     "name": "Cornea Foundation Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Shivam Orthopaedic and Gynec Hospital",
+     "kind": "hospital"
+    }
+   ]
   },
   "1302520": {
    "ward": "Jodhpur",
-   "ok": false,
-   "error": "fetch failed"
+   "ok": true,
+   "buildings": 5317,
+   "trees": 8,
+   "amenities": 42,
+   "waterPoints": 0,
+   "greenAreaKm2": 0.136,
+   "publicBuildings": [
+    {
+     "name": "Ratnamani Party Plot",
+     "kind": "events_venue"
+    },
+    {
+     "name": "Medilink Hospital, Ahmedabad",
+     "kind": "hospital"
+    },
+    {
+     "name": "Dr.Shyama Prashad Mukharji Muncipal Library",
+     "kind": "library"
+    },
+    {
+     "name": "Kameshwar School",
+     "kind": "school"
+    },
+    {
+     "name": "Ortho Kids Clinic",
+     "kind": "clinic"
+    },
+    {
+     "name": "Shanti Multi Speciality Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Rathi Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Gynaecare Women's Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Clear Vision Eye Hospital (Unit 2)",
+     "kind": "hospital"
+    },
+    {
+     "name": "Tulip Women's Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Matulya ENT Clinic",
+     "kind": "clinic"
+    },
+    {
+     "name": "Kirenben Maternity And Nursing Home",
+     "kind": "clinic"
+    }
+   ]
   },
   "1302521": {
    "ward": "Dariyapur",
-   "ok": false,
-   "error": "fetch failed"
+   "ok": true,
+   "buildings": 735,
+   "trees": 73,
+   "amenities": 33,
+   "waterPoints": 0,
+   "greenAreaKm2": 0.061,
+   "publicBuildings": [
+    {
+     "name": "Mount Carmel School, Khanpur",
+     "kind": "school"
+    },
+    {
+     "name": "Lifecare Emergency Centre",
+     "kind": "hospital"
+    },
+    {
+     "name": "Urvashi Nursing Home",
+     "kind": "clinic"
+    },
+    {
+     "name": "Memon Ent Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Chhapan Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Pinakin Dalal Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Dr. Tanumati Shah Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Jay Orthopedic Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Parijat Children Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Munciapl Prasuti Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Adhvait Psychiatry Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Shahpur Medical Hospital",
+     "kind": "hospital"
+    }
+   ]
   },
   "1302522": {
    "ward": "India colony",
-   "ok": false,
-   "error": "Overpass 406: <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">\n<html><head>\n<t"
+   "ok": true,
+   "buildings": 371,
+   "trees": 0,
+   "amenities": 11,
+   "waterPoints": 0,
+   "greenAreaKm2": 0,
+   "publicBuildings": [
+    {
+     "name": "GCS Medical College Hospital and Research Centre",
+     "kind": "hospital"
+    },
+    {
+     "name": "GCS Medical college",
+     "kind": "school"
+    },
+    {
+     "name": "Kakadiya Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Kalrav Nenotal And Children Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Smruti Eye Hospital",
+     "kind": "clinic"
+    },
+    {
+     "name": "Venkaria Ortho Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Netra Raksha Hospital, Thakkarbapa Nagar",
+     "kind": "hospital"
+    },
+    {
+     "name": "Aarna Medical Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Shiv Jyoti Eye Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Raghukul Ortho Hospital",
+     "kind": "hospital"
+    }
+   ]
   },
   "1302523": {
    "ward": "Thakkarbapa Nagar",
-   "ok": false,
-   "error": "Overpass 406: <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">\n<html><head>\n<t"
+   "ok": true,
+   "buildings": 1161,
+   "trees": 0,
+   "amenities": 6,
+   "waterPoints": 0,
+   "greenAreaKm2": 0,
+   "publicBuildings": [
+    {
+     "name": "Navjivan Orthopaedic and Maternity Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Parth Maternity and Medical Nursing Home",
+     "kind": "clinic"
+    },
+    {
+     "name": "Rugved Multispeciality Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Setu Surgical Hospital, Ahmedabad",
+     "kind": "hospital"
+    },
+    {
+     "name": "Navjivan Maternity and Orthopaedic Hospital, Ahmedabad",
+     "kind": "hospital"
+    },
+    {
+     "name": "Aagman Maternity and Gynec Hospital",
+     "kind": "hospital"
+    }
+   ]
   },
   "1302524": {
    "ward": "Nikol",
-   "ok": false,
-   "error": "fetch failed"
+   "ok": true,
+   "buildings": 1881,
+   "trees": 0,
+   "amenities": 8,
+   "waterPoints": 0,
+   "greenAreaKm2": 0.065,
+   "publicBuildings": [
+    {
+     "name": "Priyal Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Uma Maternity and Nursing Home",
+     "kind": "clinic"
+    },
+    {
+     "name": "Swastik Hospital, Ahmedabad",
+     "kind": "hospital"
+    },
+    {
+     "name": "Prasad Hospital, Ahmedabad",
+     "kind": "hospital"
+    },
+    {
+     "name": "Kalrav Maternity Hospital and Sonography Centre",
+     "kind": "hospital"
+    },
+    {
+     "name": "TEJASYA ORTHOPAEDIC HOSPITAL - DR RAVI PATEL orthopaedic surgeon",
+     "kind": "hospital"
+    }
+   ]
   },
   "1302525": {
    "ward": "Virat Nagar",
-   "ok": false,
-   "error": "fetch failed"
+   "ok": true,
+   "buildings": 3917,
+   "trees": 0,
+   "amenities": 8,
+   "waterPoints": 0,
+   "greenAreaKm2": 0,
+   "publicBuildings": [
+    {
+     "name": "Kavi Ramanlal Vasantlal Desai Muncipal Library",
+     "kind": "library"
+    },
+    {
+     "name": "Shubham Ent Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Sanket Children's Speciality Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Hari Krishna Uro Surgical Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Vatsalya Neonatal and Children Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Sardar Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Ayushman Medical Hospital and Dignosis Center",
+     "kind": "hospital"
+    },
+    {
+     "name": "Ano Care Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Ayushman Medical Hospital",
+     "kind": "hospital"
+    }
+   ]
   },
   "1302526": {
    "ward": "Bapu Nagar",
-   "ok": false,
-   "error": "Overpass 406: <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">\n<html><head>\n<t"
+   "ok": true,
+   "buildings": 2417,
+   "trees": 0,
+   "amenities": 10,
+   "waterPoints": 0,
+   "greenAreaKm2": 0,
+   "publicBuildings": [
+    {
+     "name": "Tapan Hospital Pvt Ltd",
+     "kind": "hospital"
+    },
+    {
+     "name": "Metalia Hospital and ICCU, Diamond Market",
+     "kind": "hospital"
+    },
+    {
+     "name": "Chitrakut Surgical Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Tilak Hospital (Multispeciality), Ahmedabad",
+     "kind": "hospital"
+    },
+    {
+     "name": "Sagar Orthopaedic Hospital, Bapunagar",
+     "kind": "hospital"
+    },
+    {
+     "name": "Vasundhara Medical Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Matru Hospital, Ahmedabad",
+     "kind": "hospital"
+    },
+    {
+     "name": "Madhuram Surgical Hospital",
+     "kind": "hospital"
+    }
+   ]
   },
   "1302527": {
    "ward": "Saraspur-Rakhiyal",
-   "ok": false,
-   "error": "Overpass 406: <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">\n<html><head>\n<t"
+   "ok": true,
+   "buildings": 345,
+   "trees": 0,
+   "amenities": 2,
+   "waterPoints": 0,
+   "greenAreaKm2": 0.111,
+   "publicBuildings": [
+    {
+     "name": "Shushilaben Neonatal And Child Care Centre",
+     "kind": "hospital"
+    },
+    {
+     "name": "Narayana Hrudayalaya Hospital",
+     "kind": "hospital"
+    }
+   ]
   },
   "1302528": {
    "ward": "Khadia",
-   "ok": false,
-   "error": "fetch failed"
+   "ok": true,
+   "buildings": 1354,
+   "trees": 0,
+   "amenities": 24,
+   "waterPoints": 1,
+   "greenAreaKm2": 0,
+   "publicBuildings": [
+    {
+     "name": "RA.B.GI.U Muncipal Library",
+     "kind": "library"
+    },
+    {
+     "name": "B.N.Library",
+     "kind": "library"
+    },
+    {
+     "name": "Dhwani Children Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Shree Umiya Multi Speciality Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Mamta Maternity Home",
+     "kind": "hospital"
+    },
+    {
+     "name": "LM Referral Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Mysorewala Surgical Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Shree Jee Eye and Orthopedic Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Jatan Children Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Divya Children's Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Chinubhai Baronet Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Sheth Jamnabhai Bhagubhai Trust",
+     "kind": "hospital"
+    }
+   ]
   },
   "1302529": {
    "ward": "Jamalpur",
-   "ok": false,
-   "error": "fetch failed"
+   "ok": true,
+   "buildings": 277,
+   "trees": 0,
+   "amenities": 16,
+   "waterPoints": 0,
+   "greenAreaKm2": 0.033,
+   "publicBuildings": [
+    {
+     "name": "Swa.Lalbhai Kundivala Muncipal Library",
+     "kind": "library"
+    },
+    {
+     "name": "F D High School for Girls, Jamalpur",
+     "kind": "school"
+    },
+    {
+     "name": "Herbal Unani Clinic",
+     "kind": "clinic"
+    },
+    {
+     "name": "Hindu Muslim Ekta Trust Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Chhipa Welfare Trust Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "TB Hospital",
+     "kind": "hospital"
+    }
+   ]
   },
   "1302530": {
    "ward": "Paldi",
-   "ok": false,
-   "error": "fetch failed"
+   "ok": true,
+   "buildings": 2518,
+   "trees": 223,
+   "amenities": 88,
+   "waterPoints": 0,
+   "greenAreaKm2": 0.139,
+   "publicBuildings": [
+    {
+     "name": "Paldi Bus Stand",
+     "kind": "hospital"
+    },
+    {
+     "name": "Exhibition & Spatial Design",
+     "kind": "school"
+    },
+    {
+     "name": "Prabhudas Thakkar College",
+     "kind": "school"
+    },
+    {
+     "name": "Ahmedabad Institute Of Medical Services (Aims)",
+     "kind": "hospital"
+    },
+    {
+     "name": "Shushtrut Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Navchetan School",
+     "kind": "school"
+    },
+    {
+     "name": "Arihant Fracture and Orthopedic Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Bavishi Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Aarna Super Speciality Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Shalin Hospital, Ahmedabad",
+     "kind": "hospital"
+    },
+    {
+     "name": "Talsania Clinic",
+     "kind": "clinic"
+    },
+    {
+     "name": "Niyati Ent Hospital",
+     "kind": "hospital"
+    }
+   ]
   },
   "1302531": {
    "ward": "Vasna",
-   "ok": false,
-   "error": "fetch failed"
+   "ok": true,
+   "buildings": 1405,
+   "trees": 39,
+   "amenities": 22,
+   "waterPoints": 0,
+   "greenAreaKm2": 0.093,
+   "publicBuildings": [
+    {
+     "name": "Aman Party Plot",
+     "kind": "events_venue"
+    },
+    {
+     "name": "Chanchal Party Plot",
+     "kind": "events_venue"
+    },
+    {
+     "name": "Aakash Party Plot",
+     "kind": "events_venue"
+    },
+    {
+     "name": "Jivraj Mehta Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Sneh Orthopaedic Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Sheth Hospital and Maternity Home",
+     "kind": "hospital"
+    },
+    {
+     "name": "Bhavasar Eye Hospital and Maternity Nursing Home",
+     "kind": "hospital"
+    },
+    {
+     "name": "Dev Hospital, Vasna",
+     "kind": "hospital"
+    },
+    {
+     "name": "Manish Eye Hospital - Ahmedabad",
+     "kind": "hospital"
+    },
+    {
+     "name": "Matoshree Hospital, Ahmedabad",
+     "kind": "hospital"
+    },
+    {
+     "name": "Sarjan Maternity and Nursing Home",
+     "kind": "clinic"
+    },
+    {
+     "name": "Aditya Hospital, Ahmedabad",
+     "kind": "hospital"
+    }
+   ]
   },
   "1302532": {
    "ward": "Vejalpur",
-   "ok": false,
-   "error": "fetch failed"
+   "ok": true,
+   "buildings": 5500,
+   "trees": 0,
+   "amenities": 20,
+   "waterPoints": 0,
+   "greenAreaKm2": 0,
+   "publicBuildings": [
+    {
+     "name": "Sankalp Eye Hospital, Ahmedabad",
+     "kind": "hospital"
+    },
+    {
+     "name": "Shaishav Children Hospital And Neonatal Care Unit",
+     "kind": "hospital"
+    },
+    {
+     "name": "Naresh Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Gynaecare Women's Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Shridhaj Orthopaedic Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Urva Children Hospital and Neonatal Care",
+     "kind": "hospital"
+    },
+    {
+     "name": "Nanavati Maternity Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Shyamal Orthopaedic Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Sanjivani Maternity",
+     "kind": "hospital"
+    },
+    {
+     "name": "Polio Foundation",
+     "kind": "hospital"
+    },
+    {
+     "name": "Sagar Hospital, Ahmedabad",
+     "kind": "hospital"
+    },
+    {
+     "name": "Samkit Hospital Icu and Iccu",
+     "kind": "hospital"
+    }
+   ]
   },
   "1302533": {
    "ward": "Sarkhej",
-   "ok": false,
-   "error": "fetch failed"
+   "ok": true,
+   "buildings": 1452,
+   "trees": 0,
+   "amenities": 18,
+   "waterPoints": 0,
+   "greenAreaKm2": 0.078,
+   "publicBuildings": [
+    {
+     "name": "Rushabh Medi-Surge Hospital Pvt Ltd",
+     "kind": "hospital"
+    },
+    {
+     "name": "Sahjanand Orthopaedic Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Sahyog General Hospital and Nursing Home",
+     "kind": "hospital"
+    },
+    {
+     "name": "Amena Khatun General Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Sahyog Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Navjivan hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Hope Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Mamata Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "SHREY HOSPITAL",
+     "kind": "hospital"
+    },
+    {
+     "name": "Mamta Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Anand Niketan School Sarkhej",
+     "kind": "school"
+    },
+    {
+     "name": "Cosmos Castle International School",
+     "kind": "school"
+    }
+   ]
   },
   "1302534": {
    "ward": "Maktampura",
-   "ok": false,
-   "error": "fetch failed"
+   "ok": true,
+   "buildings": 1384,
+   "trees": 0,
+   "amenities": 3,
+   "waterPoints": 0,
+   "greenAreaKm2": 0,
+   "publicBuildings": [
+    {
+     "name": "Sehat Hospital Clinic",
+     "kind": "clinic"
+    },
+    {
+     "name": "Mahin Lifecare Services Pvt.Ltd",
+     "kind": "hospital"
+    },
+    {
+     "name": "Amena Khatun General Hospital",
+     "kind": "hospital"
+    }
+   ]
   },
   "1302535": {
    "ward": "Baherampura",
-   "ok": false,
-   "error": "fetch failed"
+   "ok": true,
+   "buildings": 364,
+   "trees": 0,
+   "amenities": 10,
+   "waterPoints": 0,
+   "greenAreaKm2": 0,
+   "publicBuildings": [
+    {
+     "name": "Jamalpur",
+     "kind": "community_centre"
+    },
+    {
+     "name": "Life Care Clinic",
+     "kind": "clinic"
+    },
+    {
+     "name": "Mumtaz Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "New Life Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Chepirog Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Brighton Primary English School",
+     "kind": "school"
+    }
+   ]
   },
   "1302536": {
    "ward": "Danilimda",
-   "ok": false,
-   "error": "fetch failed"
+   "ok": true,
+   "buildings": 894,
+   "trees": 0,
+   "amenities": 23,
+   "waterPoints": 0,
+   "greenAreaKm2": 0,
+   "publicBuildings": [
+    {
+     "name": "Jankalyan Hospital, Ahmedabad",
+     "kind": "hospital"
+    },
+    {
+     "name": "Parth Eye Hospital, Ahmedabad",
+     "kind": "hospital"
+    },
+    {
+     "name": "Dr.Soneji Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Trupti Heart and Medical Hospital, Ahmedabad",
+     "kind": "hospital"
+    },
+    {
+     "name": "CGHS Dispensary No.2",
+     "kind": "clinic"
+    },
+    {
+     "name": "Smruti Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Vahedi Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Hazrat Amina BIbi Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Sambhav General Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Munsipal Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Aaditya Spine Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Safal Children Hospital",
+     "kind": "hospital"
+    }
+   ]
   },
   "1302537": {
    "ward": "Mani Nagar",
-   "ok": false,
-   "error": "fetch failed"
+   "ok": true,
+   "buildings": 3983,
+   "trees": 0,
+   "amenities": 61,
+   "waterPoints": 0,
+   "greenAreaKm2": 0.075,
+   "publicBuildings": [
+    {
+     "name": "AMC MET Medical College",
+     "kind": "college"
+    },
+    {
+     "name": "Jivkorbhai Lallubhai High School",
+     "kind": "school"
+    },
+    {
+     "name": "KK Shah Jarodwala Science College",
+     "kind": "college"
+    },
+    {
+     "name": "Maneklal Jethalal Public Library",
+     "kind": "library"
+    },
+    {
+     "name": "Gorvardhan AM Tripathi Muncipal Library",
+     "kind": "library"
+    },
+    {
+     "name": "Aarna Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Kadam Maternity Home and Sonography Clinic",
+     "kind": "clinic"
+    },
+    {
+     "name": "Akshar Surgical Hospital, Maninagar",
+     "kind": "hospital"
+    },
+    {
+     "name": "Synergy Neonatal and Pediatric Centre",
+     "kind": "hospital"
+    },
+    {
+     "name": "Abhishek Hospital and Heart Centre",
+     "kind": "hospital"
+    },
+    {
+     "name": "Ratan Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Sardar Hosital",
+     "kind": "hospital"
+    }
+   ]
   },
   "1302538": {
    "ward": "Gomtipur",
-   "ok": false,
-   "error": "fetch failed"
+   "ok": true,
+   "buildings": 205,
+   "trees": 0,
+   "amenities": 0,
+   "waterPoints": 0,
+   "greenAreaKm2": 0.123,
+   "publicBuildings": []
   },
   "1302539": {
    "ward": "Amraiwadi",
-   "ok": false,
-   "error": "fetch failed"
+   "ok": true,
+   "buildings": 1030,
+   "trees": 0,
+   "amenities": 2,
+   "waterPoints": 0,
+   "greenAreaKm2": 0,
+   "publicBuildings": [
+    {
+     "name": "VIVEKANAND VIDYALAYA",
+     "kind": "school"
+    },
+    {
+     "name": "Het Childcare Hospital",
+     "kind": "hospital"
+    }
+   ]
   },
   "1302540": {
    "ward": "Odhav",
-   "ok": false,
-   "error": "fetch failed"
+   "ok": true,
+   "buildings": 3616,
+   "trees": 0,
+   "amenities": 2,
+   "waterPoints": 0,
+   "greenAreaKm2": 0,
+   "publicBuildings": [
+    {
+     "name": "Dhwani General Hospital, Nursing Home and Materity Home",
+     "kind": "hospital"
+    },
+    {
+     "name": "Dhwani General Hospital Nursing Home and Maternity Home",
+     "kind": "hospital"
+    }
+   ]
   },
   "1302541": {
    "ward": "Vastral",
-   "ok": false,
-   "error": "fetch failed"
+   "ok": true,
+   "buildings": 5437,
+   "trees": 0,
+   "amenities": 4,
+   "waterPoints": 0,
+   "greenAreaKm2": 0.153,
+   "publicBuildings": [
+    {
+     "name": "Hariom Multispeciality Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Shreedhar Hospital, Ahmedabad",
+     "kind": "hospital"
+    },
+    {
+     "name": "Shukan Maternity Home",
+     "kind": "hospital"
+    },
+    {
+     "name": "charvi Hospital",
+     "kind": "hospital"
+    }
+   ]
   },
   "1302542": {
    "ward": "Indrapuri",
-   "ok": false,
-   "error": "fetch failed"
+   "ok": true,
+   "buildings": 4727,
+   "trees": 0,
+   "amenities": 16,
+   "waterPoints": 0,
+   "greenAreaKm2": 0,
+   "publicBuildings": [
+    {
+     "name": "Loving Community",
+     "kind": "community_centre"
+    },
+    {
+     "name": "Shivam Eye Hospital",
+     "kind": "clinic"
+    },
+    {
+     "name": "Odhav Orthopaedic Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Divya Jeevan Medical Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Gujarat Hospital, Ahmedabad",
+     "kind": "hospital"
+    },
+    {
+     "name": "Ashirwad Surgical Hospital, C.T.M",
+     "kind": "hospital"
+    },
+    {
+     "name": "Prabhu Nursing Home, Ahmedabad",
+     "kind": "clinic"
+    },
+    {
+     "name": "Rangam Multispeciality Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Bhakti Maternity and Sonography Clinic",
+     "kind": "clinic"
+    },
+    {
+     "name": "Rukshmani Medical Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Nadkarni's 21St Century Hospitals Pvt Ltd",
+     "kind": "hospital"
+    },
+    {
+     "name": "Kuvar Ba General Hospital",
+     "kind": "hospital"
+    }
+   ]
   },
   "1302543": {
    "ward": "Bhaipura Hatkeshwar",
-   "ok": false,
-   "error": "fetch failed"
+   "ok": true,
+   "buildings": 1171,
+   "trees": 0,
+   "amenities": 6,
+   "waterPoints": 0,
+   "greenAreaKm2": 0,
+   "publicBuildings": [
+    {
+     "name": "Dhruv Health Care",
+     "kind": "clinic"
+    },
+    {
+     "name": "Babycare Children Hospital and Neonatal Centre",
+     "kind": "hospital"
+    },
+    {
+     "name": "Bhakti Maternity and Sonography Clinic",
+     "kind": "clinic"
+    },
+    {
+     "name": "Anoop Children Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Aniket Ent Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Palak Hospital, Ahmedabad",
+     "kind": "hospital"
+    }
+   ]
   },
   "1302544": {
    "ward": "Khokhra",
-   "ok": false,
-   "error": "fetch failed"
+   "ok": true,
+   "buildings": 1425,
+   "trees": 0,
+   "amenities": 20,
+   "waterPoints": 0,
+   "greenAreaKm2": 0.026,
+   "publicBuildings": [
+    {
+     "name": "Vani Hospital & IVF center",
+     "kind": "hospital"
+    },
+    {
+     "name": "Vani IVF Center",
+     "kind": "hospital"
+    },
+    {
+     "name": "Vasavda Community Centre",
+     "kind": "community_centre"
+    },
+    {
+     "name": "ESIS HOSPITAL",
+     "kind": "hospital"
+    },
+    {
+     "name": "Rukshmani Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Shashvat Child Care",
+     "kind": "clinic"
+    },
+    {
+     "name": "Nilkanth Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Ansuya General Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Pallav J M Desai Memorial Hospital (Better Health Pvt.Ltd.)",
+     "kind": "hospital"
+    },
+    {
+     "name": "Rukshmani Government Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Vivek Children Hospital, Khokhara",
+     "kind": "hospital"
+    },
+    {
+     "name": "Ashirwad Hospital, Ahmedabad",
+     "kind": "hospital"
+    }
+   ]
   },
   "1302545": {
    "ward": "Isanpur",
-   "ok": false,
-   "error": "fetch failed"
+   "ok": true,
+   "buildings": 77,
+   "trees": 0,
+   "amenities": 40,
+   "waterPoints": 0,
+   "greenAreaKm2": 0,
+   "publicBuildings": [
+    {
+     "name": "Matrupooja Eye Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Chhaya Maternity Nursing Home",
+     "kind": "clinic"
+    },
+    {
+     "name": "Jhanvi Fracture and Orthopaedic Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Shilp Orthopaedics And Trauma Centre",
+     "kind": "hospital"
+    },
+    {
+     "name": "Vraj Hospital and Heart Care Center",
+     "kind": "hospital"
+    },
+    {
+     "name": "Parth Eye Hospital, Isanpur",
+     "kind": "hospital"
+    },
+    {
+     "name": "Swapn Healthcare Hospital Pvt. Ltd",
+     "kind": "hospital"
+    },
+    {
+     "name": "Dr, Nayan V Shah Surgical Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Shlok Medical and Heart Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Harshil Medical Nursing Home, Isanpur",
+     "kind": "clinic"
+    },
+    {
+     "name": "Geeta Maternity and Polyclinic Nursing Home",
+     "kind": "clinic"
+    },
+    {
+     "name": "Raj Maternity Home",
+     "kind": "hospital"
+    }
+   ]
   },
   "1302546": {
    "ward": "Lambha",
-   "ok": false,
-   "error": "Overpass 406: <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">\n<html><head>\n<t"
+   "ok": true,
+   "buildings": 311,
+   "trees": 0,
+   "amenities": 20,
+   "waterPoints": 0,
+   "greenAreaKm2": 0,
+   "publicBuildings": [
+    {
+     "name": "Jankalyan Janaseva Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Shree Shakti General Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Narol ICU and Multi Speciality Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Mediclaim Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Diya Clinic",
+     "kind": "clinic"
+    },
+    {
+     "name": "Janani Women and Children Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Medicure Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Dhanwantari Clinic",
+     "kind": "clinic"
+    },
+    {
+     "name": "Lambha Skin Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Indira Women's Care and Multi Speciality Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Dr. K.B. Bhagatariya Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Aman Multi Speciality Hospital",
+     "kind": "hospital"
+    }
+   ]
   },
   "1302547": {
    "ward": "Vatva",
-   "ok": false,
-   "error": "fetch failed"
+   "ok": true,
+   "buildings": 74,
+   "trees": 0,
+   "amenities": 22,
+   "waterPoints": 0,
+   "greenAreaKm2": 0,
+   "publicBuildings": [
+    {
+     "name": "Matru Chhaya Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Kashiba General Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Vimala Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Smruti Multi Speciality Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Abhinav Clinic",
+     "kind": "clinic"
+    },
+    {
+     "name": "Harsh Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Abhinav Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Roshan General Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Shyam Clinic",
+     "kind": "clinic"
+    },
+    {
+     "name": "Shree Gurukrupa Clinic",
+     "kind": "clinic"
+    },
+    {
+     "name": "Krishna General Hospital",
+     "kind": "hospital"
+    },
+    {
+     "name": "Pramukh Hospital and Research Centre",
+     "kind": "hospital"
+    }
+   ]
   },
   "1302548": {
    "ward": "Ramol Hathijan",
-   "ok": false,
-   "error": "Overpass 406: <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">\n<html><head>\n<t"
+   "ok": true,
+   "buildings": 1406,
+   "trees": 1,
+   "amenities": 6,
+   "waterPoints": 0,
+   "greenAreaKm2": 0.007,
+   "publicBuildings": [
+    {
+     "name": "Life Care Clinic",
+     "kind": "clinic"
+    }
+   ]
   }
  }
 }
