@@ -876,6 +876,23 @@
   .ai-ask button:disabled { opacity: 0.45; cursor: default; }
   .ai-qa { font-size: 11px; margin-bottom: 12px; }
   .ai-qa .q { color: #c9a96e; margin-bottom: 6px; }
+  .fact-table { width: 100%; border-collapse: collapse; font-size: 11px; }
+  .fact-table td { padding: 3px 0; }
+  .fact-table td.n { text-align: right; font-variant-numeric: tabular-nums; }
+  .fact-table td.r { text-align: right; color: var(--muted); font-size: 10px; width: 48px; }
+  .fact-table tr + tr td { border-top: 1px solid rgba(255,255,255,0.05); }
+  .fact-raw { margin-top: 8px; }
+  .fact-raw summary {
+    cursor: pointer; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--muted); list-style: none;
+  }
+  .fact-raw summary::-webkit-details-marker { display: none; }
+  .fact-raw summary::before { content: "▸ "; }
+  .fact-raw[open] summary::before { content: "▾ "; }
+  .fact-raw pre {
+    font-size: 10px; white-space: pre-wrap; margin: 6px 0 0;
+    color: var(--muted); max-height: 220px; overflow: auto;
+  }
 </style>
 </head>
 <body>
@@ -1053,16 +1070,10 @@ mapboxgl.accessToken = 'YOUR_MAPBOX_TOKEN_HERE';
 // 注：模型密钥不再出现在客户端。它属于「绝不可公开」那一类，只存在于服务端
 // 环境变量中，由 /api 下的函数持有。见 THERMIS 升级方案阶段 0/1。
 
-// Street View key, fetched from the server rather than committed. It still
-// reaches the browser — a Static Street View request carries its key in the
-// image URL — but keeping it out of the repository avoids secret-scanner
-// alerts on an already referrer-restricted key. Street View is decorative:
-// if this never arrives, the panel simply omits it.
-let GOOGLE_MAPS_API_KEY = '';
-fetch('/api/config')
-  .then((r) => r.json())
-  .then((c) => { GOOGLE_MAPS_API_KEY = c.googleMapsKey || ''; })
-  .catch(() => {});
+// ← Street View key. Substituted at build time from GOOGLE_MAPS_KEY; the
+// placeholder is what lives in git. Street View is decorative — if the token
+// is absent the panel simply omits it.
+const GOOGLE_MAPS_API_KEY = 'YOUR_GOOGLE_MAPS_KEY_HERE';
 
 // GeoJSON 文件路径 — 替换成你的实际文件路径或 URL
 const GEOJSON = {
@@ -1768,6 +1779,99 @@ async function fetchAIAnalysis(wardName, hviClass, props, layerKey) {
     `<div class="ai-panel-text" style="color:var(--muted)">No data for this ward.</div>`;
 }
 
+// ── FACT RENDERING BY INTENT ──────────────────────────────────
+// Every branch shows the computed figures before the prose. Raw tool output
+// stays available behind a disclosure rather than on screen: it is the proof
+// that the model did not produce these numbers, which matters when explaining
+// the design, but it is not what a reader came for.
+const METRIC_META = {
+  lst:        { label: 'Land surface temp', unit: '°C',   dp: 2 },
+  ndvi:       { label: 'NDVI',              unit: '',     dp: 3 },
+  population: { label: 'Population',        unit: '',     dp: 0 },
+  popDensity: { label: 'Density',           unit: '/km²', dp: 0 },
+  hvi:        { label: 'HVI',               unit: '',     dp: 3 },
+};
+
+function fmtValue(metric, v) {
+  const m = METRIC_META[metric] || { unit: '', dp: 2 };
+  if (typeof v !== 'number') return '—';
+  return (m.dp === 0 ? Math.round(v).toLocaleString() : v.toFixed(m.dp)) + m.unit;
+}
+
+function rawBlock(facts) {
+  return `<details class="fact-raw"><summary>tool output</summary><pre>${escapeHtml(JSON.stringify(facts, null, 1))}</pre></details>`;
+}
+
+function renderRankFacts(f) {
+  const meta = METRIC_META[f.metric] || { label: f.metric };
+  const dir = f.order === 'asc' ? 'lowest' : 'highest';
+  const rows = f.wards.map(w =>
+    `<tr><td>${escapeHtml(w.ward)}</td><td class="n">${fmtValue(f.metric, w.value)}</td><td class="r">${w.rank} / ${WARD_FACTS.city.wardCount}</td></tr>`
+  ).join('');
+  return `
+    <div class="fact-block">
+      <div class="fact-block-label">Measured · ${escapeHtml(meta.label)} · ${dir}</div>
+      <table class="fact-table">${rows}</table>
+      <div class="fact-row" style="margin-top:6px;border-top:1px solid rgba(255,255,255,0.08);padding-top:6px">
+        <span class="k">City median</span><span class="v">${fmtValue(f.metric, f.cityMedian)}</span>
+      </div>
+      ${rawBlock(f)}
+    </div>`;
+}
+
+function renderCompareFacts(f) {
+  const [a, b] = f.wards;
+  const rows = Object.entries(f.diffs).map(([metric, d]) => {
+    const meta = METRIC_META[metric] || { label: metric };
+    const mark = (name) => d.higher === name ? ' ▲' : '';
+    return `<tr>
+      <td>${escapeHtml(meta.label)}</td>
+      <td class="n">${fmtValue(metric, d[a])}${mark(a)}</td>
+      <td class="n">${fmtValue(metric, d[b])}${mark(b)}</td>
+    </tr>`;
+  }).join('');
+  return `
+    <div class="fact-block">
+      <div class="fact-block-label">Measured · side by side</div>
+      <table class="fact-table">
+        <tr><td></td><td class="n" style="color:#c9a96e">${escapeHtml(a)}</td><td class="n" style="color:#c9a96e">${escapeHtml(b)}</td></tr>
+        ${rows}
+      </table>
+      ${rawBlock(f)}
+    </div>`;
+}
+
+function renderCityFacts(f) {
+  const rows = Object.entries(f.metrics).map(([metric, m]) => {
+    const meta = METRIC_META[metric] || { label: metric };
+    return `<tr>
+      <td>${escapeHtml(meta.label)}</td>
+      <td class="n">${fmtValue(metric, m.median)}</td>
+      <td class="r">${fmtValue(metric, m.min)}–${fmtValue(metric, m.max)}</td>
+    </tr>`;
+  }).join('');
+  return `
+    <div class="fact-block">
+      <div class="fact-block-label">Measured · ${f.wardCount} wards · median (range)</div>
+      <table class="fact-table">${rows}</table>
+      ${rawBlock(f)}
+    </div>`;
+}
+
+function renderFactsFor(route, facts) {
+  if (!facts || !route) return '';
+  try {
+    if (route.intent === 'ward') return renderFactBlock(lookupFacts(route.ward)) + rawBlock(facts);
+    if (route.intent === 'rank') return renderRankFacts(facts);
+    if (route.intent === 'compare') return renderCompareFacts(facts);
+    if (route.intent === 'city') return renderCityFacts(facts);
+  } catch (e) {
+    console.warn('fact rendering failed:', e);
+  }
+  // Never silently drop the figures — an unstyled dump beats showing only prose.
+  return `<div class="fact-block"><div class="fact-block-label">Measured</div>${rawBlock(facts)}</div>`;
+}
+
 // ── FREE-FORM QUESTIONS ───────────────────────────────────────
 function wireAskForm() {
   const form = document.getElementById('ai-ask-form');
@@ -1786,12 +1890,7 @@ function wireAskForm() {
     try {
       const out = await askAnalyzer(q);
       let html = `<div class="ai-qa"><div class="q">${escapeHtml(q)}</div></div>`;
-      if (out.route && out.route.intent === 'ward') {
-        html += renderFactBlock(lookupFacts(out.route.ward));
-      } else if (out.facts) {
-        html += `<div class="fact-block"><div class="fact-block-label">Computed</div>
-          <pre style="font-size:10px;white-space:pre-wrap;margin:0">${escapeHtml(JSON.stringify(out.facts, null, 1))}</pre></div>`;
-      }
+      html += renderFactsFor(out.route, out.facts);
       if (out.answer) {
         html += renderInterp(out.answer, out.facts && out.facts.caveat ? { caveat: out.facts.caveat } : {});
       } else if (out.rejected) {
